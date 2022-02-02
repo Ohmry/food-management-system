@@ -4,20 +4,19 @@
     <v-main>
       <router-view/>
     </v-main>
-    <SystemMonitor />
+    <!-- <SystemMonitor /> -->
   </v-app>
 </template>
 
 <script>
 
 import MenuNavigator from './components/MenuNavigator'
-import SystemMonitor from './components/SystemMonitor'
+// import SystemMonitor from './components/SystemMonitor'
 
 export default {
   name: 'App',
   components: {
-    MenuNavigator,
-    SystemMonitor
+    MenuNavigator
   }
 };
 </script>

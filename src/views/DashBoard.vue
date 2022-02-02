@@ -9,7 +9,7 @@
               <OverviewItem title="Total Transaction" icon="shopping_cart" value="9,438" />
             </v-col>
             <v-col cols="12" md="3">
-              <OverviewItem title="Total Sales" icon="attach_money" value="9,438" />
+              <OverviewItem title="Total Sales" icon="attach_money" value="1,999,438" />
             </v-col>
             <v-col cols="12" md="3">
               <OverviewItem title="Average Selling Price" icon="show_chart" value="9,438" />
