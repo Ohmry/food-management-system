@@ -2,7 +2,19 @@
   <v-app>
     <v-container fluid>
       <MenuTitle title="Material" description="you can see and manage all materials"/>
-      <v-data-table :headers="table.headers" :items="table.data">
+      <v-toolbar flat>
+        <v-btn rounded style="color: #9D84BF">
+          <v-icon class="mr-2" color="#9D84BF">add_circle</v-icon>
+          New
+        </v-btn>
+        <v-btn rounded style="color: #9D84BF" class="mx-3">
+          <v-icon class="mr-2" color="#9D84BF">remove_circle</v-icon>
+          Delete
+        </v-btn>
+      </v-toolbar>
+      <v-data-table :headers="table.headers" :items="table.data"
+        fixed-header height="80vh" :hide-default-footer="true" :items-per-page="-1"
+        style="user-select: none">
         <template v-slot:item.checked="{item}">
           <v-simple-checkbox v-model="item.checked" :ripple="false"></v-simple-checkbox>
         </template>
