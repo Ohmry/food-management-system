@@ -16,7 +16,7 @@
               <OverviewItem title="Food list" icon="restaurant" value="23"/>
             </v-col>
             <v-col cols="12" md="2">
-              <OverviewItem title="Total sales" icon="attach_money" value="100000"/>
+              <OverviewItem title="Total sales" icon="attach_money" value="100,000"/>
             </v-col>
             <v-col cols="12" md="2">
               <OverviewItem title="Average cost" icon="stacked_bar_chart" value="1,000.5"/>
