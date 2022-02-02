@@ -1,13 +1,13 @@
 <template>
   <v-navigation-drawer app mini-variant mini-variant-width="80" color="#F2F2F2">
     <!-- Logo -->
-    <v-avatar class="d-block text-center mx-auto mt-4" size="40">
-      <v-icon color="#58238C" large>fab fa-github</v-icon>
+    <v-avatar class="d-block text-center mx-auto mt-4" size="52">
+      <v-icon color="#9D84BF" size="52">fab fa-github</v-icon>
     </v-avatar>
     <v-divider class="mx-3 my-3"></v-divider>
     <v-list flat>
       <router-link v-for="(item, index) in menuItems" :key="index" :to="item.title">
-        <v-list-item :ripple="false" active-class="menu-selected" class="mb-2">
+        <v-list-item :ripple="false" active-class="menu-selected" class="mb-1">
           <v-list-item-icon>
             <v-icon v-text="item.icon" size="32" light></v-icon>
           </v-list-item-icon>
