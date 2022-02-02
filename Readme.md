@@ -14,3 +14,8 @@ This application has menu as follow.
 
 ## Skills
 This application created by vuejs. using vuetify framework.
+
+## Notes
+  - color codes refer to https://color.adobe.com/ko/stats-color-theme-19231399/
+  - icons refer to https://fonts.google.com/icons
+  - design coding refer to https://www.youtube.com/watch?v=9C-20VZMkcg
