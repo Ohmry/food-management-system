@@ -12,6 +12,9 @@ export default new Vuetify({
   theme: {
     colors: {
       primary: '#7BC6FF'
+    },
+    navigator: {
+      background: '#F2F2F2'
     }
   }
 });

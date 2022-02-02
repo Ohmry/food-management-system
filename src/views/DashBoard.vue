@@ -2,7 +2,9 @@
   <v-app>
     <v-container fluid>
       <v-toolbar color="rgba(0, 0, 0, 0)" flat>
-        <v-toolbar-title>Overview</v-toolbar-title>
+        <v-toolbar-title class="text-h4">
+          <strong>Overview</strong>
+        </v-toolbar-title>
       </v-toolbar>
       <v-item-group class="mt-n4">
         <v-container fluid>

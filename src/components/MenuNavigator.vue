@@ -1,18 +1,18 @@
 <template>
-  <v-navigation-drawer app mini-variant mini-variant-width="80" color="#EEEEEE">
+  <v-navigation-drawer app mini-variant mini-variant-width="80" color="#F2F2F2">
     <!-- Logo -->
     <v-avatar class="d-block text-center mx-auto mt-4" size="40">
-      <v-icon color="#1697F6" large>fab fa-github</v-icon>
+      <v-icon color="#58238C" large>fab fa-github</v-icon>
     </v-avatar>
     <v-divider class="mx-3 my-3"></v-divider>
     <v-list flat>
-      <v-list-item-group v-model="selectedItem" mandatory @change="changeMenu">
-        <v-list-item v-for="(item, index) in menuItems" :key="index" :ripple="false" active-class="menu-selected" class="mb-2">
+      <router-link v-for="(item, index) in menuItems" :key="index" :to="item.title">
+        <v-list-item :ripple="false" active-class="menu-selected" class="mb-2">
           <v-list-item-icon>
-            <v-icon v-text="item.icon" large></v-icon>
+            <v-icon v-text="item.icon" size="32" light></v-icon>
           </v-list-item-icon>
         </v-list-item>
-      </v-list-item-group>
+      </router-link>
     </v-list>
   </v-navigation-drawer>
 </template>
@@ -20,28 +20,29 @@
 <script>
 export default {
   data: () => ({
-    selectedItem: 0, 
+    currentMenuItem: 0, 
     menuItems: [
-      { title: 'Dashboard', icon: 'dashboard' },
+      { title: 'DashBoard', icon: 'dashboard' },
       { title: 'Material', icon: 'local_shipping' },
       { title: 'Food', icon: 'restaurant' },
       { title: 'Sales', icon: 'attach_money' },
       { title: 'Stock', icon: 'store' }
     ]
-  }),
-  methods: {
-    changeMenu (index) {
-      this.$emit('change', this.menuItems[index].title)
-    }
-  }
+  })
 }
 </script>
 
 <style>
-  .menu-selected {
-    margin: 0 5px;
-    background: #FBFBFB;
+  .v-list > a {
+    color: transparent !important;
+  }
+  .router-link-active > .v-list-item {
+    margin: 0 8px;
+    background: #9D84BF;
     text-decoration: none;
     border-radius: 50%;
+  }
+  .router-link-active > .v-list-item > .v-list-item__icon > i{
+    color: white !important;
   }
 </style>

@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <MenuNavigator @change="changeMenu"/>
+    <MenuNavigator/>
     <v-main>
       <router-view/>
     </v-main>
@@ -15,11 +15,6 @@ export default {
   name: 'App',
   components: {
     MenuNavigator
-  },
-  methods: {
-    changeMenu (menu) {
-      this.$router.push(menu)
-    }
   }
 };
 </script>
