@@ -6,7 +6,7 @@
       dark height="200"
       style="user-select: none">
       <v-row>
-        <v-col cols="12" sm="12">
+        <v-col cols="12" sm="12" class="mx-3 my-3">
           <v-list-item three-line>
             <v-list-item-content>
               <div>
