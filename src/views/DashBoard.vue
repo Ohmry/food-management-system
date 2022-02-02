@@ -1,11 +1,7 @@
 <template>
   <v-app>
     <v-container fluid>
-      <v-toolbar color="rgba(0, 0, 0, 0)" flat>
-        <v-toolbar-title class="text-h4 mb-3" style="color: #9D84BF">
-          <strong>Overview</strong>
-        </v-toolbar-title>
-      </v-toolbar>
+      <MenuTitle title="Overview" description="you can see mainly information of system such as follow"/>
       <v-item-group>
         <v-container fluid>
           <v-row justify="start">
@@ -42,9 +38,11 @@
 
 <script>
 import OverviewItem from '../components/Dashboard/OverviewItem.vue'
+import MenuTitle from '../components/MenuTitle'
 export default {
   components: {
-    OverviewItem
+    OverviewItem,
+    MenuTitle
   }
 }
 </script>
