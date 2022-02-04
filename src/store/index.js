@@ -82,10 +82,22 @@ export default new Vuex.Store({
   },
   mutations: {
     [MT_UPDATE_RECIPE] (state, payload) {
-      console.log(state, payload)
+      let recipe = state.recipes.find(recipe => recipe.id == payload.id)
+      if (recipe == undefined) return
+
+      let material = recipe.materials.find(material => material.id == payload.material.id)
+      if (material == undefined) return
+
+      material.amount = Number(payload.material.amount)
     },
     [MT_UPDATE_COMPOSITION] (state, payload) {
-      console.log(state, payload)
+      let composition = state.compositions.find(composition => composition.id == payload.id)
+      if (composition == undefined) return
+
+      let food = composition.foods.find(food => food.id == payload.food.id)
+      if (food == undefined) return
+
+      food.quantity = Number(payload.food.quantity)
     }
   },
   actions: {

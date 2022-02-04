@@ -12,7 +12,7 @@
               fixed-header height="70vh" v-model="foods.table.selectedItem">
               <template v-slot:body="{items}">
                 <tbody>
-                  <tr v-for="item in items" :key="item.name" @click="selectRow('food', item)" :class="{ 'v-data-table-row__active': item.isSelected, 'v-data-table-row': !item.isSelected }">
+                  <tr v-for="item in items" :key="item.name" @click="selectRow('food', item)" :class="{ 'v-data-table-row__selected': item.isSelected, 'v-data-table-row': !item.isSelected }">
                     <td>{{ item.name }}</td>
                     <td class="text-right">{{ item.productType }}</td>
                     <td class="text-right">{{ displayFormat(item.price, 'numeric') }}</td>
@@ -39,12 +39,12 @@
                           fixed-header height="70vh" v-model="composition.table.selectedItem">
                 <template v-slot:body="{items}">
                   <tbody>
-                    <tr v-for="item in items" :key="item.id" @click="selectRow('composition', item)" :class="{ 'v-data-table-row__active': item.isSelected, 'v-data-table-row': !item.isSelected }">
+                    <tr v-for="item in items" :key="item.id" @click="selectRow('composition', item)" :class="{ 'v-data-table-row__selected': item.isSelected, 'v-data-table-row': !item.isSelected }">
                       <td>{{ item.name }}</td>
                       <td>
-                        <EditableCell v-model="item.quantity" type="text" 
+                        <EditableCell type="text" :target="item" params="quantity"
                           title="Change Quantity" subtitle="Enter the quantity you want"
-                          @save="saveCompositionItem"/>
+                          @save="saveCompositionItem" @open="openCompositionItem"/>
                       </td>
                     </tr>
                   </tbody>
@@ -62,11 +62,11 @@
                           fixed-header height="70vh" v-model="recipe.table.selectedItem">
                 <template v-slot:body="{items}">
                   <tbody>
-                    <tr v-for="item in items" :key="item.name" @click="selectRow('recipe', item)" :class="{ 'v-data-table-row__active': item.isSelected, 'v-data-table-row': !item.isSelected }">
+                    <tr v-for="item in items" :key="item.name" @click="selectRow('recipe', item)" :class="{ 'v-data-table-row__selected': item.isSelected, 'v-data-table-row': !item.isSelected }">
                       <td>{{ item.name }}</td>
                       <td>
-                        <EditableCell v-model="item.amount" type="text" title="Change Amount" subtitle="Enter the amount you want" 
-                          @save="saveRecipeItem"/>
+                        <EditableCell :target="item" params="amount" type="number" title="Change Amount" subtitle="Enter the amount you want" 
+                          @save="saveRecipeItem" @open="openReceipeItem"/>
                       </td>
                       <td>{{ item.stockUnit }}</td>
                     </tr>
@@ -239,13 +239,23 @@ export default {
         })
       }
     },
-    saveRecipeItem () {
-      this.$store.commit(MT_UPDATE_RECIPE, this.recipe.table.selectedItem)
+    openReceipeItem (recipe) {
+      this.selectRow('recipe', recipe)
+    },
+    saveRecipeItem (params, value) {
+      let material = this.recipe.table.data.find(recipe => recipe.id == this.recipe.table.selectedItem[0].id)
+      material[params] = value
+      this.$store.commit(MT_UPDATE_RECIPE, { id: this.foods.table.selectedItem[0].id, material: material })
       this.snackbar.text = 'Amount change successful'
       this.snackbar.visible = true
     },
-    saveCompositionItem () {
-      this.$store.commit(MT_UPDATE_COMPOSITION, this.composition.table.selectedItem)
+    openCompositionItem (composition) {
+      this.selectRow('composition', composition)
+    },
+    saveCompositionItem (params, value) {
+      let food = this.composition.table.data.find(composition => composition.id == this.composition.table.selectedItem[0].id)
+      food[params] = value
+      this.$store.commit(MT_UPDATE_COMPOSITION, { id: this.foods.table.selectedItem[0].id, food: food})
       this.snackbar.text = 'Quantity change successful'
       this.snackbar.visible = true
     }

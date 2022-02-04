@@ -80,11 +80,4 @@ export default {
 </script>
 
 <style>
-  .v-data-table-row:hover {
-    background-color: rgba(157, 132, 191, 0.2) !important;
-    cursor: pointer;
-  }
-  .v-data-table-row__selected, .v-data-table-row__selected:hover {
-    background-color: rgba(157, 132, 191, 0.5) !important;
-  }
 </style>
