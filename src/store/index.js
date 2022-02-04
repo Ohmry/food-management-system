@@ -1,5 +1,9 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import { 
+        MT_UPDATE_RECIPE,
+        MT_UPDATE_COMPOSITION
+       } from './mutation-types'
 
 Vue.use(Vuex)
 
@@ -37,9 +41,52 @@ export default new Vuex.Store({
       { id: 6, name: 'Burger Set', productType: 'Set', price: 6100 },
       { id: 7, name: 'Hotdog Set', productType: 'Set', price: 4100 },
       { id: 8, name: 'Sandwich Set', productType: 'Set', price: 4000 }
+    ],
+    compositions: [
+      {
+        id: 6,
+        foods: [
+          { id: 1, quantity: 1 },
+          { id: 3, quantity: 1 },
+          { id: 5, quantity: 1 }
+        ]
+      },
+      {
+        id: 7,
+        foods: [
+          { id: 2, quantity: 1 },
+          { id: 5, quantity: 1 }
+        ]
+      },
+      {
+        id: 8,
+        foods: [
+          { id: 4, quantity: 1 },
+          { id: 5, quantity: 1 }
+        ]
+      }
+    ],
+    recipes: [
+      {
+        id: 1,
+        materials: [
+          { id: 1, amount: 1 },
+          { id: 2, amount: 1 },
+          { id: 3, amount: 5 },
+          { id: 4, amount: 10 },
+          { id: 5, amount: 75 },
+          { id: 7, amount: 1 }
+        ]
+      }
     ]
   },
   mutations: {
+    [MT_UPDATE_RECIPE] (state, payload) {
+      console.log(state, payload)
+    },
+    [MT_UPDATE_COMPOSITION] (state, payload) {
+      console.log(state, payload)
+    }
   },
   actions: {
   },

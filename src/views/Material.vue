@@ -3,33 +3,25 @@
     <v-container fluid>
       <MenuTitle title="Material" description="you can see and manage all materials"/>
       <v-toolbar flat>
-        <v-btn rounded style="color: #9D84BF">
-          <v-icon class="mr-2" color="#9D84BF">add_circle</v-icon>
-          New
-        </v-btn>
-        <v-btn rounded style="color: #9D84BF" class="mx-3">
-          <v-icon class="mr-2" color="#9D84BF">remove_circle</v-icon>
-          Delete
-        </v-btn>
+        <v-spacer></v-spacer>
+        <Button text="New" icon="add" />
+        <Button text="Edit" icon="edit" class="ml-3" />
+        <Button text="Delete" icon="remove" class="ml-3" />
       </v-toolbar>
       <v-data-table :headers="table.headers" :items="table.data" style="user-select: none">
-        <template v-slot:item.checked="{item}">
-          <v-simple-checkbox v-model="item.checked" :ripple="false"></v-simple-checkbox>
-        </template>
-        <template v-slot:item.purchasePrice="{item}">
-          {{ item.purchasePrice ? item.purchasePrice.toString().replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,') : '' }}
-        </template>
-        <template v-slot:item.supplyPrice="{item}">
-          {{ item.supplyPrice ? item.supplyPrice.toString().replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,') : '' }}
-        </template>
-        <template v-slot:item.valueAddedTax="{item}">
-          {{ item.valueAddedTax ? item.valueAddedTax.toString().replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,') : '' }}
-        </template>
-        <template v-slot:item.stockConversionQuantity="{item}">
-          {{ item.stockConversionQuantity ? item.stockConversionQuantity.toString().replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,') : '' }}
-        </template>
-        <template v-slot:item.stockUnitPrice="{item}">
-          {{ item.stockUnitPrice ? parseFloat(item.stockUnitPrice).toFixed(3).toString().replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,') : '' }}
+        <template v-slot:body="{items}">
+          <tbody>
+            <tr v-for="item in items" :key="item.id" @click="selectRow(item)" :class="{ 'v-data-table-row__selected': item.isSelected, 'v-data-table-row': !item.isSelected }">
+              <td>{{ item.name }}</td>
+              <td class="text-right">{{ item.purchaseUnit }}</td>
+              <td class="text-right">{{ displayFormat(item.purchasePrice, 'numeric') }}</td>
+              <td class="text-right">{{ displayFormat(item.supplyPrice, 'numeric') }}</td>
+              <td class="text-right">{{ displayFormat(item.valueAddedTax, 'numeric') }}</td>
+              <td class="text-right">{{ item.stockUnit }}</td>
+              <td class="text-right">{{ displayFormat(item.stockConversionQuantity, 'numeric') }}</td>
+              <td class="text-right">{{ displayFormat(item.stockUnitPrice, 'decimal') }}</td>
+            </tr>
+          </tbody>
         </template>
       </v-data-table>
     </v-container>
@@ -38,14 +30,19 @@
 
 <script>
 import MenuTitle from '../components/MenuTitle'
+import Button from '../components/Button'
+import DisplayFormatUtils from '../components/Utils/DisplayFormatUtils'
+
 export default {
   components: {
-    MenuTitle
+    MenuTitle,
+    Button
   },
+  mixins: [DisplayFormatUtils],
   data: () => ({
     table: {
       headers: [
-        { text: '', value: 'checked', width: '30px', sortable: false },
+        // { text: '', value: 'checked', width: '30px', sortable: false },
         { text: 'Name', value: 'name', },
         { text: 'Purchase Unit', value: 'purchaseUnit', width: '160px', align: 'end', sortable: false },
         { text: 'Purchase Price', value: 'purchasePrice', width: '200px', align: 'end', sortable: false },
@@ -58,10 +55,16 @@ export default {
       data: []
     }
   }),
+  methods: {
+    selectRow (row) {
+      this.table.data.map(item => item.isSelected = item.id == row.id)
+    }
+  },
   mounted () {
     this.table.data = Array.from(this.$store.state.materials.map(material => {
       return {
-        checked: false,
+        isSelected: false,
+        id: material.id,
         name: material.name,
         purchaseUnit: material.purchaseUnit,
         purchasePrice: material.purchasePrice,
@@ -77,5 +80,11 @@ export default {
 </script>
 
 <style>
-
+  .v-data-table-row:hover {
+    background-color: rgba(157, 132, 191, 0.2) !important;
+    cursor: pointer;
+  }
+  .v-data-table-row__selected, .v-data-table-row__selected:hover {
+    background-color: rgba(157, 132, 191, 0.5) !important;
+  }
 </style>
