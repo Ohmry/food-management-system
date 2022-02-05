@@ -48,8 +48,8 @@
 
 <script>
 import OverviewItem from '../components/Dashboard/OverviewItem.vue'
-import MenuTitle from '../components/MenuTitle'
-import MenuSubTitle from '../components/MenuSubTitle'
+import MenuTitle from '../components/Menu/MenuTitle'
+import MenuSubTitle from '../components/Menu/MenuSubTitle'
 import PieChart from '../components/Chart/PieChart.js'
 
 export default {

@@ -10,7 +10,7 @@
 
 <script>
 
-import MenuNavigator from './components/MenuNavigator'
+import MenuNavigator from './components/Menu/MenuNavigator'
 // import SystemMonitor from './components/SystemMonitor'
 
 export default {

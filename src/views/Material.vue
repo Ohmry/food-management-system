@@ -4,9 +4,9 @@
       <MenuTitle title="Material" description="you can see and manage all materials"/>
       <v-toolbar flat>
         <v-spacer></v-spacer>
-        <Button text="New" icon="add" />
-        <Button text="Edit" icon="edit" class="ml-3" />
-        <Button text="Delete" icon="remove" class="ml-3" />
+        <MaterialRegisterButton text="New" icon="add" />
+        <MaterialModifierButton text="Edit" icon="edit" className="ml-3" />
+        <Button text="Delete" icon="remove" outlined class="ml-3" />
       </v-toolbar>
       <v-data-table :headers="table.headers" :items="table.data" style="user-select: none">
         <template v-slot:body="{items}">
@@ -29,14 +29,18 @@
 </template>
 
 <script>
-import MenuTitle from '../components/MenuTitle'
-import Button from '../components/Button'
+import MenuTitle from '../components/Menu/MenuTitle'
+import Button from '../components/Common/Button'
+import MaterialRegisterButton from '../components/Material/MaterialRegisterButton'
+import MaterialModifierButton from '../components/Material/MaterialModifierButton'
 import DisplayFormatUtils from '../components/Utils/DisplayFormatUtils'
 
 export default {
   components: {
     MenuTitle,
-    Button
+    Button,
+    MaterialRegisterButton,
+    MaterialModifierButton
   },
   mixins: [DisplayFormatUtils],
   data: () => ({

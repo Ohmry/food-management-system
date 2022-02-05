@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import MenuTitle from '../components/MenuTitle'
+import MenuTitle from '../components/Menu/MenuTitle'
 export default {
   components: {
     MenuTitle

@@ -96,9 +96,9 @@
 </template>
 
 <script>
-import MenuTitle from '../components/MenuTitle'
+import MenuTitle from '../components/Menu/MenuTitle'
 import DisplayFormatUtils from '../components/Utils/DisplayFormatUtils'
-import Button from '../components/Button'
+import Button from '../components/Common/Button'
 import EditableCell from '../components/DataTable/EditableCell'
 import { 
         MT_UPDATE_RECIPE,
