@@ -44,6 +44,7 @@ export default {
   mixins: [DisplayFormatUtils],
   data: () => ({
     dialog: {
+      type: undefined,
       title: undefined,
       visible: false
     },
@@ -69,11 +70,15 @@ export default {
     openMaterial (type) {
       switch (type) {
         case 'new':
+          this.dialog.type = 'new'
           this.dialog.title = 'New Material'
+          this.dialog.description = 'you can create new material item'
           this.dialog.visible = true
           break;
         case 'update':
+          this.dialog.type = 'update'
           this.dialog.title = 'Material Info'
+          this.dialog.description = 'you can modify the material item'
           this.dialog.visible = true
           break;
         default:
