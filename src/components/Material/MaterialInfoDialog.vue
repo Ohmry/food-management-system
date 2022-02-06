@@ -5,8 +5,8 @@
     max-width="600px"
     persistent>
     <v-card>
-      <v-card-title class="text-h5 px-9 pt-5" style="color: #9D84BF">{{ dialog.title }}</v-card-title>
-      <v-card-subtitle class="py-1 px-9">{{ dialog.description }}</v-card-subtitle>
+      <v-card-title class="text-h5 px-9 pt-5" style="color: #9D84BF">{{ title }}</v-card-title>
+      <v-card-subtitle class="py-1 px-9">{{ description }}</v-card-subtitle>
       <v-card-text>
         <v-form ref="form">
           <v-container>
@@ -46,8 +46,8 @@
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <Button v-if="dialog.type == 'new'" text="Save" icon="done" depressed color="white" @click.stop="onSave"/>
-        <Button v-if="dialog.type == 'update'" text="Update" icon="done" depressed color="white" @click.stop="onUpdate"/>
+        <Button v-if="mode == 'new'" text="Save" icon="done" depressed color="white" @click.stop="onSave"/>
+        <Button v-if="mode == 'update'" text="Update" icon="done" depressed color="white" @click.stop="onUpdate"/>
         <Button text="Close" icon="close" depressed color="white" @click.stop="onClose(false)"/>
     </v-card-actions>
     </v-card>
@@ -69,14 +69,46 @@ export default {
       type: Boolean,
       required: true
     },
-    dialog: {
+    mode: {
       required: true
+    },
+    material: undefined
+  },
+  watch: {
+    visible (to) {
+      if (to && this.mode == 'update') {
+        this.form = JSON.parse(JSON.stringify(this.material))
+      }
     }
   },
   computed: {
+    title: {
+      get () {
+        switch (this.mode) {
+          case 'new':
+            return 'New Material'
+          case 'update':
+            return 'Material Info'
+          default:
+            return 'Material Info'
+        }
+      }
+    },
+    description: {
+      get () {
+        switch (this.mode) {
+          case 'new':
+            return 'you can create new material item'
+          case 'update':
+            return 'you can modify the material item'
+          default:
+            return 'you can see material info'
+        }
+      }
+    },
     visible: {
       get () {
-        return this.dialog.visible
+        return this.value
       },
       set (value) {
         this.$emit('input', value)
@@ -132,6 +164,7 @@ export default {
         this.form.supplyPrice = undefined
         this.form.valueAddedTax = undefined
       }
+      this.updateStockConversionQuantity (this.form.stockConversionQuantity)
     },
     updateStockConversionQuantity (quantity) {
       if (Number.isInteger(Number(quantity)) && Number.isInteger(this.form.supplyPrice)) {

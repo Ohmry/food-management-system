@@ -6,8 +6,8 @@
         <v-spacer></v-spacer>
         <Button text="New" icon="add" outlined @click.stop="openMaterial('new')" />
         <Button text="Edit" icon="edit" outlined class="ml-3" @click.stop="openMaterial('update')" />
-        <Button text="Delete" icon="remove" outlined class="ml-3" />
-        <MaterialInfoDialog :value="dialog.visible" :dialog="dialog" @input="dialog.visible = $event" @close="onCloseDialog"/>
+        <Button text="Delete" icon="remove" outlined class="ml-3" @click.stop="deleteMaterial"/>
+        <MaterialInfoDialog :mode="dialog.mode" :value="dialog.visible" :material="dialog.material" @input="dialog.visible = $event" @close="onCloseDialog"/>
       </v-toolbar>
       <v-data-table :headers="table.headers" :items="table.data" style="user-select: none">
         <template v-slot:body="{items}">
@@ -34,6 +34,7 @@ import MenuTitle from '../components/Menu/MenuTitle'
 import Button from '../components/Common/Button'
 import MaterialInfoDialog from '../components/Material/MaterialInfoDialog'
 import DisplayFormatUtils from '../components/Utils/DisplayFormatUtils'
+import { AC_DELETE_MATERIAL } from '../store/mutation-types'
 
 export default {
   components: {
@@ -44,8 +45,7 @@ export default {
   mixins: [DisplayFormatUtils],
   data: () => ({
     dialog: {
-      type: undefined,
-      title: undefined,
+      mode: undefined,
       visible: false,
       material: undefined
     },
@@ -87,21 +87,23 @@ export default {
     openMaterial (type) {
       switch (type) {
         case 'new':
-          this.dialog.type = 'new'
-          this.dialog.title = 'New Material'
-          this.dialog.description = 'you can create new material item'
+          this.dialog.mode = 'new'
           this.dialog.visible = true
           break;
         case 'update':
-          this.dialog.type = 'update'
-          this.dialog.title = 'Material Info'
-          this.dialog.description = 'you can modify the material item'
-          this.dialog.visible = true
+          this.dialog.mode = 'update'
           this.dialog.material = this.table.data.find(material => material.isSelected == true)
+          this.dialog.visible = true
           break;
         default:
           break;
       }
+    },
+    deleteMaterial () {
+      let material = this.table.data.find(material => material.isSelected == true)
+      if (material == undefined) return
+      this.$store.dispatch(AC_DELETE_MATERIAL, JSON.parse(JSON.stringify(material)))
+      this.selectMaterials()
     },
     onCloseDialog (refresh) {
       if (refresh) {

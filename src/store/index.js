@@ -3,10 +3,12 @@ import Vuex from 'vuex'
 import { 
         AC_SAVE_MATERIAL,
         AC_UPDATE_MATERIAL,
+        AC_DELETE_MATERIAL,
         MT_UPDATE_RECIPE,
         MT_UPDATE_COMPOSITION,
         MT_SAVE_MATERIAL,
-        MT_UPDATE_MATERIAL
+        MT_UPDATE_MATERIAL,
+        MT_DELETE_MATERIAL
        } from './mutation-types'
 
 Vue.use(Vuex)
@@ -97,7 +99,18 @@ export default new Vuex.Store({
     [MT_UPDATE_MATERIAL] (state, payload) {
       let material = state.materials.find(material => material.id == payload.id)
       if (material == undefined) new Error('material is not found')
-      material = JSON.parse(JSON.stringify(payload))
+      material.name = payload.name
+      material.purchaseUnit = payload.purchaseUnit
+      material.purchasePrice = payload.purchasePrice
+      material.stockUnit = payload.stockUnit
+      material.stockConversionQuantity = payload.stockConversionQuantity
+      material.supplyPrice = payload.supplyPrice
+      material.valueAddedTax = payload.valueAddedTax
+      material.stockUnitPrice = payload.stockUnitPrice
+    },
+    [MT_DELETE_MATERIAL] (state, payload) {
+      let index = state.materials.findIndex(material => material.id == payload.id)
+      state.materials.splice(index, 1)
     },
     [MT_UPDATE_RECIPE] (state, payload) {
       let recipe = state.recipes.find(recipe => recipe.id == payload.id)
@@ -129,6 +142,13 @@ export default new Vuex.Store({
     [AC_UPDATE_MATERIAL] ({ commit }, payload) {
       try {
         commit(MT_UPDATE_MATERIAL, payload)
+      } catch (err) {
+        console.error(err)
+      }
+    },
+    [AC_DELETE_MATERIAL] ({ commit }, payload) {
+      try {
+        commit(MT_DELETE_MATERIAL, payload)
       } catch (err) {
         console.error(err)
       }
