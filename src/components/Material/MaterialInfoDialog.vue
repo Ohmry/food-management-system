@@ -36,10 +36,8 @@
             </v-row>
             <v-row>
               <v-col cols="12" md="12">
-                <v-currency-field v-model.number="form.supplyPrice" disabled label="Supply Price" />
-                <v-currency-field v-model.number="form.valueAddedTax" disabled label="Value Added Tax" />
-                <!-- <v-text-field v-model.number="form.supplyPrice" disabled type="number" label="Supply Price" /> -->
-                <!-- <v-text-field v-model="form.valueAddedTax" disabled type="number" label="Value Added Tax" /> -->
+                <VCurrencyField v-model.number="form.supplyPrice" disabled label="Supply Price" />
+                <VCurrencyField v-model.number="form.valueAddedTax" disabled label="Value Added Tax" />
                 <v-text-field v-model="form.stockUnitPrice" disabled type="number" label="Stock Unit Price" />
               </v-col>
             </v-row>
@@ -50,7 +48,7 @@
         <v-spacer></v-spacer>
         <Button v-if="dialog.type == 'new'" text="Save" icon="done" depressed color="white" @click.stop="onSave"/>
         <Button v-if="dialog.type == 'update'" text="Update" icon="done" depressed color="white" @click.stop="onUpdate"/>
-        <Button text="Close" icon="close" depressed color="white" @click.stop="onClose"/>
+        <Button text="Close" icon="close" depressed color="white" @click.stop="onClose(false)"/>
     </v-card-actions>
     </v-card>
   </v-dialog>
@@ -59,6 +57,7 @@
 <script>
 import Button from '../Common/Button'
 import VCurrencyField from '../Common/VCurrencyField'
+import { AC_SAVE_MATERIAL, AC_UPDATE_MATERIAL } from '../../store/mutation-types'
 
 export default {
   components: {
@@ -107,14 +106,21 @@ export default {
   }),
   methods: {
     onSave () {
-
+      let validate = this.$refs.form.validate()
+      if (!validate) return
+      this.$store.dispatch(AC_SAVE_MATERIAL, JSON.parse(JSON.stringify(this.form)))
+      this.onClose(true)
     },
     onUpdate () {
-
+      let validate = this.$refs.form.validate()
+      if (!validate) return
+      this.$store.dispatch(AC_UPDATE_MATERIAL, JSON.parse(JSON.stringify(this.form)))
+      this.onClose(true)
     },
-    onClose () {
-      this.$refs.form.reset()
+    onClose (refresh) {
       this.visible = false
+      this.$refs.form.reset()
+      this.$emit('close', refresh)
     },
     updatePurchasePrice (price) {
       if (Number.isInteger(Number(price))) {

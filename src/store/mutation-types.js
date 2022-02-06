@@ -1,2 +1,13 @@
+/** Materials */
+export const AC_SAVE_MATERIAL = 'AC_SAVE_MATERIAL'
+export const AC_UPDATE_MATERIAL = 'AC_UPDATE_MATERIAL'
+export const MT_SAVE_MATERIAL = 'MT_SAVE_MATERIAL'
+export const MT_UPDATE_MATERIAL = 'MT_UPDATE_MATERIAL'
+export const MT_DELETE_MATERIAL = 'MT_DELETE_MATERIAL'
+
+
+/** Recipe */
 export const MT_UPDATE_RECIPE = 'UPDATE_RECIPE'
+
+/** Composition */
 export const MT_UPDATE_COMPOSITION = 'UPDATE_COMPOSITION'

@@ -1,8 +1,12 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import { 
+        AC_SAVE_MATERIAL,
+        AC_UPDATE_MATERIAL,
         MT_UPDATE_RECIPE,
-        MT_UPDATE_COMPOSITION
+        MT_UPDATE_COMPOSITION,
+        MT_SAVE_MATERIAL,
+        MT_UPDATE_MATERIAL
        } from './mutation-types'
 
 Vue.use(Vuex)
@@ -81,6 +85,20 @@ export default new Vuex.Store({
     ]
   },
   mutations: {
+    [MT_SAVE_MATERIAL] (state, payload) {
+      let materialMaxId = Math.max.apply(Math, state.materials.map(material => material.id))
+      if (materialMaxId > 0) {
+        payload.id = materialMaxId + 1
+      } else {
+        payload.id = 1
+      }
+      state.materials.push(payload)
+    },
+    [MT_UPDATE_MATERIAL] (state, payload) {
+      let material = state.materials.find(material => material.id == payload.id)
+      if (material == undefined) new Error('material is not found')
+      material = JSON.parse(JSON.stringify(payload))
+    },
     [MT_UPDATE_RECIPE] (state, payload) {
       let recipe = state.recipes.find(recipe => recipe.id == payload.id)
       if (recipe == undefined) return
@@ -101,6 +119,20 @@ export default new Vuex.Store({
     }
   },
   actions: {
+    [AC_SAVE_MATERIAL] ({ commit }, payload) {
+      try {
+        commit(MT_SAVE_MATERIAL, payload)
+      } catch (err) {
+        console.error(err)
+      }
+    },
+    [AC_UPDATE_MATERIAL] ({ commit }, payload) {
+      try {
+        commit(MT_UPDATE_MATERIAL, payload)
+      } catch (err) {
+        console.error(err)
+      }
+    }
   },
   modules: {
   }

@@ -7,7 +7,7 @@
         <Button text="New" icon="add" outlined @click.stop="openMaterial('new')" />
         <Button text="Edit" icon="edit" outlined class="ml-3" @click.stop="openMaterial('update')" />
         <Button text="Delete" icon="remove" outlined class="ml-3" />
-        <MaterialInfoDialog :value="dialog.visible" :dialog="dialog" @input="dialog.visible = $event" />
+        <MaterialInfoDialog :value="dialog.visible" :dialog="dialog" @input="dialog.visible = $event" @close="onCloseDialog"/>
       </v-toolbar>
       <v-data-table :headers="table.headers" :items="table.data" style="user-select: none">
         <template v-slot:body="{items}">
@@ -46,7 +46,8 @@ export default {
     dialog: {
       type: undefined,
       title: undefined,
-      visible: false
+      visible: false,
+      material: undefined
     },
     table: {
       headers: [
@@ -64,6 +65,22 @@ export default {
     }
   }),
   methods: {
+    selectMaterials () {
+      this.table.data = Array.from(this.$store.state.materials.map(material => {
+        return {
+          isSelected: false,
+          id: material.id,
+          name: material.name,
+          purchaseUnit: material.purchaseUnit,
+          purchasePrice: material.purchasePrice,
+          supplyPrice: material.supplyPrice,
+          valueAddedTax: material.valueAddedTax,
+          stockUnit: material.stockUnit,
+          stockConversionQuantity: material.stockConversionQuantity,
+          stockUnitPrice: material.stockUnitPrice
+        }
+      }))
+    },
     selectRow (row) {
       this.table.data.map(item => item.isSelected = item.id == row.id)
     },
@@ -80,27 +97,20 @@ export default {
           this.dialog.title = 'Material Info'
           this.dialog.description = 'you can modify the material item'
           this.dialog.visible = true
+          this.dialog.material = this.table.data.find(material => material.isSelected == true)
           break;
         default:
           break;
       }
+    },
+    onCloseDialog (refresh) {
+      if (refresh) {
+        this.selectMaterials()
+      }
     }
   },
   mounted () {
-    this.table.data = Array.from(this.$store.state.materials.map(material => {
-      return {
-        isSelected: false,
-        id: material.id,
-        name: material.name,
-        purchaseUnit: material.purchaseUnit,
-        purchasePrice: material.purchasePrice,
-        supplyPrice: material.supplyPrice,
-        valueAddedTax: material.valueAddedTax,
-        stockUnit: material.stockUnit,
-        stockConversionQuantity: material.stockConversionQuantity,
-        stockUnitPrice: material.stockUnitPrice
-      }
-    }))
+    this.selectMaterials()
   }
 }
 </script>
