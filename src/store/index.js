@@ -111,6 +111,15 @@ export default new Vuex.Store({
     [MT_DELETE_MATERIAL] (state, payload) {
       let index = state.materials.findIndex(material => material.id == payload.id)
       state.materials.splice(index, 1)
+      let recipes = state.recipes.filter(recipe => {
+        return recipe.materials.find(material => material.id == payload.id) != undefined
+      })
+      if (recipes != undefined) {
+        recipes.map(recipe => {
+          let materialIndex = recipe.materials.findIndex(material => material.id == payload.id)
+          recipe.materials.splice(materialIndex, 1)
+        })
+      }
     },
     [MT_UPDATE_RECIPE] (state, payload) {
       let recipe = state.recipes.find(recipe => recipe.id == payload.id)
