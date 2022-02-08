@@ -25,22 +25,26 @@
           </tbody>
         </template>
       </v-data-table>
+      <SnackBar :text="snackbar.text" :value="snackbar.visible" @input="snackbar.visible = $event"/>
+      <ConfirmDialog :value="confirm.visible" :title="confirm.title" :text="confirm.text" @input="confirm.visible = $event" />
     </v-container>
   </v-app>
 </template>
 
 <script>
-import MenuTitle from '../components/Menu/MenuTitle'
-import Button from '../components/Common/Button'
-import MaterialInfoDialog from '../components/Material/MaterialInfoDialog'
-import DisplayFormatUtils from '../components/Utils/DisplayFormatUtils'
-import { AC_DELETE_MATERIAL } from '../store/mutation-types'
+import { Button, SnackBar, ConfirmDialog } from '../components/Common'
+import { MenuTitle } from '../components/Menu'
+import { MaterialInfoDialog } from '../components/Material'
+import { DisplayFormatUtils } from '../components/Utils'
+// import { AC_DELETE_MATERIAL } from '../store/mutation-types'
 
 export default {
   components: {
     MenuTitle,
     Button,
-    MaterialInfoDialog
+    MaterialInfoDialog,
+    SnackBar,
+    ConfirmDialog
   },
   mixins: [DisplayFormatUtils],
   data: () => ({
@@ -49,9 +53,17 @@ export default {
       visible: false,
       material: undefined
     },
+    confirm: {
+      visible: false,
+      text: '',
+      title: ''
+    },
+    snackbar: {
+      visible: false,
+      text: undefined
+    },
     table: {
       headers: [
-        // { text: '', value: 'checked', width: '30px', sortable: false },
         { text: 'Name', value: 'name', },
         { text: 'Purchase Unit', value: 'purchaseUnit', width: '160px', align: 'end', sortable: false },
         { text: 'Purchase Price', value: 'purchasePrice', width: '200px', align: 'end', sortable: false },
@@ -90,23 +102,40 @@ export default {
           this.dialog.mode = 'new'
           this.dialog.visible = true
           break;
-        case 'update':
-          this.dialog.mode = 'update'
-          this.dialog.material = this.table.data.find(material => material.isSelected == true)
-          this.dialog.visible = true
+        case 'update': {
+          let selectedItem = this.table.data.find(material => material.isSelected == true)
+          if (selectedItem == undefined) {
+            this.snackbar.text = "Please select material item you want to edit"
+            this.snackbar.visible = true 
+          } else {
+            this.dialog.mode = 'update'
+            this.dialog.material = selectedItem
+            this.dialog.visible = true
+          }
           break;
+        }
         default:
           break;
       }
     },
     deleteMaterial () {
       let material = this.table.data.find(material => material.isSelected == true)
-      if (material == undefined) return
-      this.$store.dispatch(AC_DELETE_MATERIAL, JSON.parse(JSON.stringify(material)))
-      this.selectMaterials()
+      if (material == undefined) {
+        this.snackbar.text = "Please select material item you want to delete"
+        this.snackbar.visible = true 
+      } else {
+        this.confirm.title = "Deleting Material Info"
+        this.confirm.text = "Are you sure to delete material info?"
+        this.confirm.visible = true
+        
+        // this.$store.dispatch(AC_DELETE_MATERIAL, JSON.parse(JSON.stringify(material)))
+        // this.selectMaterials()
+      }
     },
     onCloseDialog (refresh) {
       if (refresh) {
+        this.snackbar.text = "Done"
+        this.snackbar.visible = true
         this.selectMaterials()
       }
     }
