@@ -36,8 +36,8 @@
             </v-row>
             <v-row>
               <v-col cols="12" md="12">
-                <VCurrencyField v-model.number="form.supplyPrice" disabled label="Supply Price" />
-                <VCurrencyField v-model.number="form.valueAddedTax" disabled label="Value Added Tax" />
+                <AppCurrencyField v-model.number="form.supplyPrice" disabled label="Supply Price" />
+                <AppCurrencyField v-model.number="form.valueAddedTax" disabled label="Value Added Tax" />
                 <v-text-field v-model="form.stockUnitPrice" disabled type="number" label="Stock Unit Price" />
               </v-col>
             </v-row>
@@ -46,24 +46,18 @@
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <Button v-if="mode == 'new'" text="Save" icon="done" depressed color="white" @click.stop="onSave"/>
-        <Button v-if="mode == 'update'" text="Update" icon="done" depressed color="white" @click.stop="onUpdate"/>
-        <Button text="Close" icon="close" depressed color="white" @click.stop="onClose(false)"/>
+        <AppButton v-if="mode == 'new'" text="Save" icon="done" depressed color="white" @click.stop="onSave"/>
+        <AppButton v-if="mode == 'update'" text="Update" icon="done" depressed color="white" @click.stop="onUpdate"/>
+        <AppButton text="Close" icon="close" depressed color="white" @click.stop="onClose(false)"/>
     </v-card-actions>
     </v-card>
   </v-dialog>
 </template>
 
 <script>
-import Button from '../Common/Button'
-import VCurrencyField from '../Common/VCurrencyField'
 import { AC_SAVE_MATERIAL, AC_UPDATE_MATERIAL } from '../../store/mutation-types'
 
 export default {
-  components: {
-    Button,
-    VCurrencyField
-  },
   props: {
     value: {
       type: Boolean,

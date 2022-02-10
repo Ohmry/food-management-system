@@ -1,12 +1,12 @@
 <template>
   <v-app>
     <v-container fluid>
-      <MenuTitle title="Material" description="you can see and manage all materials"/>
+      <ViewTitle title="Material" description="you can see and manage all materials"/>
       <v-toolbar flat>
         <v-spacer></v-spacer>
-        <Button text="New" icon="add" outlined @click.stop="openMaterial('new')" />
-        <Button text="Edit" icon="edit" outlined class="ml-3" @click.stop="openMaterial('update')" />
-        <Button text="Delete" icon="remove" outlined class="ml-3" @click.stop="deleteMaterial"/>
+        <AppButton text="New" icon="add" outlined @click.stop="openMaterial('new')" />
+        <AppButton text="Edit" icon="edit" outlined class="ml-3" @click.stop="openMaterial('update')" />
+        <AppButton text="Delete" icon="remove" outlined class="ml-3" @click.stop="deleteMaterial"/>
         <MaterialInfoDialog :mode="dialog.mode" :value="dialog.visible" :material="dialog.material" @input="dialog.visible = $event" @close="onCloseDialog"/>
       </v-toolbar>
       <v-data-table :headers="table.headers" :items="table.data" style="user-select: none">
@@ -25,26 +25,19 @@
           </tbody>
         </template>
       </v-data-table>
-      <SnackBar :text="snackbar.text" :value="snackbar.visible" @input="snackbar.visible = $event"/>
-      <ConfirmDialog :value="confirm.visible" :title="confirm.title" :text="confirm.text" @input="confirm.visible = $event" />
+      <AppSnackBar :text="snackbar.text" :value="snackbar.visible" @input="snackbar.visible = $event"/>
     </v-container>
   </v-app>
 </template>
 
 <script>
-import { Button, SnackBar, ConfirmDialog } from '../components/Common'
-import { MenuTitle } from '../components/Menu'
 import { MaterialInfoDialog } from '../components/Material'
 import { DisplayFormatUtils } from '../components/Utils'
 // import { AC_DELETE_MATERIAL } from '../store/mutation-types'
 
 export default {
   components: {
-    MenuTitle,
-    Button,
-    MaterialInfoDialog,
-    SnackBar,
-    ConfirmDialog
+    MaterialInfoDialog
   },
   mixins: [DisplayFormatUtils],
   data: () => ({

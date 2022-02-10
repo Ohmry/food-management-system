@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-container fluid>
-      <MenuTitle title="Overview" description="you can see mainly information of system such as follow"/>
+      <ViewTitle title="Overview" description="you can see mainly information of system such as follow"/>
       <v-item-group>
         <v-container fluid>
           <v-row justify="start">
@@ -21,7 +21,7 @@
         </v-container>
       </v-item-group>
       <v-container fluid>
-        <MenuSubTitle title="Most Sales Food" description="you can see the most sales food list and graph"/>
+        <ViewSubTitle title="Most Sales Food" description="you can see the most sales food list and graph"/>
         <v-row>
           <v-col cols="12" md="6" sm="1">
             <v-data-table :headers="table.headers" :items="table.datasets" :hide-default-footer="true"
@@ -48,15 +48,11 @@
 
 <script>
 import OverviewItem from '../components/Dashboard/OverviewItem.vue'
-import MenuTitle from '../components/Menu/MenuTitle'
-import MenuSubTitle from '../components/Menu/MenuSubTitle'
 import PieChart from '../components/Chart/PieChart.js'
 
 export default {
   components: {
     OverviewItem,
-    MenuTitle,
-    MenuSubTitle,
     PieChart
   },
   data: () => ({

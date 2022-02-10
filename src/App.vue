@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <MenuNavigator/>
+    <AppNavigator />
     <v-main>
       <router-view/>
     </v-main>
@@ -9,15 +9,8 @@
 </template>
 
 <script>
-
-import MenuNavigator from './components/Menu/MenuNavigator'
-// import SystemMonitor from './components/SystemMonitor'
-
 export default {
-  name: 'App',
-  components: {
-    MenuNavigator
-  }
+  name: 'App'
 };
 </script>
 

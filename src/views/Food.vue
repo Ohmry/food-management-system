@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-container fluid>
-      <MenuTitle title="Food" description="you can see and manage all food"/>
+      <ViewTitle title="Food" description="you can see and manage all food"/>
       <v-row justify="center">
         <v-col cols="12" md="5" style="padding: 20px 30px 10px 30px">
           <v-tabs color="rgba(157, 132, 191)">
@@ -23,9 +23,9 @@
           </v-tabs-items>
           <v-toolbar flat>
             <v-spacer></v-spacer>
-            <Button text="New" icon="add" />
-            <Button text="Edit" icon="edit" class="ml-3"/>
-            <Button text="Delete" icon="remove" class="ml-3"/>
+            <AppButton text="New" icon="add" />
+            <AppButton text="Edit" icon="edit" class="ml-3"/>
+            <AppButton text="Delete" icon="remove" class="ml-3"/>
           </v-toolbar>
         </v-col>
         <v-col cols="12" md="7" style="padding: 20px 50px 10px 30px">
@@ -52,9 +52,9 @@
               </v-data-table>
               <v-toolbar flat>
                 <v-spacer></v-spacer>
-                <Button text="Add" icon="add" />
-                <Button text="Edit" icon="edit" class="ml-3" />
-                <Button text="Remove" icon="remove" class="ml-3" />
+                <AppButton text="Add" icon="add" />
+                <AppButton text="Edit" icon="edit" class="ml-3" />
+                <AppButton text="Remove" icon="remove" class="ml-3" />
               </v-toolbar>
             </v-tab-item>
             <v-tab-item>
@@ -75,9 +75,9 @@
               </v-data-table>
               <v-toolbar flat>
                 <v-spacer></v-spacer>
-                <Button text="Add" icon="add" />
-                <Button text="Edit" icon="edit" class="ml-3" />
-                <Button text="Remove" icon="remove" class="ml-3" />
+                <AppButton text="Add" icon="add" />
+                <AppButton text="Edit" icon="edit" class="ml-3" />
+                <AppButton text="Remove" icon="remove" class="ml-3" />
               </v-toolbar>
             </v-tab-item>
           </v-tabs-items>
@@ -96,9 +96,7 @@
 </template>
 
 <script>
-import MenuTitle from '../components/Menu/MenuTitle'
 import DisplayFormatUtils from '../components/Utils/DisplayFormatUtils'
-import Button from '../components/Common/Button'
 import EditableCell from '../components/DataTable/EditableCell'
 import { 
         MT_UPDATE_RECIPE,
@@ -107,8 +105,6 @@ import {
 
 export default {
   components: {
-    MenuTitle,
-    Button,
     EditableCell
   },
   mixins: [DisplayFormatUtils],
