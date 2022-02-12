@@ -5,6 +5,7 @@
       <router-view/>
     </v-main>
     <AppConfirm />
+    <AppSnackBar />
   </v-app>
 </template>
 
