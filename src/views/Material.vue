@@ -134,6 +134,15 @@ export default {
     }
   },
   mounted () {
+    this.$confirm(
+      {
+        title: 'Confirm',
+        message: 'TEST',
+        callback: function (confirm) {
+          console.log(confirm)
+        }
+      }
+    )
     this.selectMaterials()
   }
 }

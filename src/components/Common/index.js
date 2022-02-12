@@ -9,8 +9,9 @@ import AppSnackBar from './AppSnackBar'
 import ViewTitle from './ViewTitle'
 import ViewSubTitle from './ViewSubTitle'
 
+Vue.use(AppConfirm)
+
 Vue.component('AppButton', AppButton)
-Vue.component('AppConfirm', AppConfirm)
 Vue.component('AppCurrencyField', AppCurrencyField)
 Vue.component('AppDialog', AppDialog)
 Vue.component('AppNavigator', AppNavigator)

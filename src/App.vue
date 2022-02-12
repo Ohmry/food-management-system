@@ -4,7 +4,7 @@
     <v-main>
       <router-view/>
     </v-main>
-    <!-- <SystemMonitor /> -->
+    <AppConfirm />
   </v-app>
 </template>
 
