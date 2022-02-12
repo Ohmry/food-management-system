@@ -25,7 +25,6 @@
           </tbody>
         </template>
       </v-data-table>
-      <AppSnackBar :text="snackbar.text" :value="snackbar.visible" @input="snackbar.visible = $event"/>
     </v-container>
   </v-app>
 </template>
@@ -33,7 +32,7 @@
 <script>
 import { MaterialInfoDialog } from '../components/Material'
 import { DisplayFormatUtils } from '../components/Utils'
-// import { AC_DELETE_MATERIAL } from '../store/mutation-types'
+import { AC_DELETE_MATERIAL } from '../store/mutation-types'
 
 export default {
   components: {
@@ -98,8 +97,8 @@ export default {
         case 'update': {
           let selectedItem = this.table.data.find(material => material.isSelected == true)
           if (selectedItem == undefined) {
-            this.snackbar.text = "Please select material item you want to edit"
-            this.snackbar.visible = true 
+            // this.snackbar.text = "Please select material item you want to edit"
+            // this.snackbar.visible = true 
           } else {
             this.dialog.mode = 'update'
             this.dialog.material = selectedItem
@@ -114,35 +113,33 @@ export default {
     deleteMaterial () {
       let material = this.table.data.find(material => material.isSelected == true)
       if (material == undefined) {
-        this.snackbar.text = "Please select material item you want to delete"
-        this.snackbar.visible = true 
+        this.$snackbar({
+          text: 'Please select material item you want to delete'
+        })
+        // this.snackbar.text = "Please select material item you want to delete"
+        // this.snackbar.visible = true 
       } else {
-        this.confirm.title = "Deleting Material Info"
-        this.confirm.text = "Are you sure to delete material info?"
-        this.confirm.visible = true
-        
-        // this.$store.dispatch(AC_DELETE_MATERIAL, JSON.parse(JSON.stringify(material)))
-        // this.selectMaterials()
+        this.$confirm({
+          title: "Delete Material Info",
+          message: "Are you sure to delete material info?",
+          callback: confirm => {
+            if (confirm) {
+              this.$store.dispatch(AC_DELETE_MATERIAL, JSON.parse(JSON.stringify(material)))
+              this.selectMaterials()
+            }
+          }
+        })
       }
     },
     onCloseDialog (refresh) {
       if (refresh) {
-        this.snackbar.text = "Done"
-        this.snackbar.visible = true
+        // this.snackbar.text = "Done"
+        // this.snackbar.visible = true
         this.selectMaterials()
       }
     }
   },
   mounted () {
-    this.$confirm(
-      {
-        title: 'Confirm',
-        message: 'TEST',
-        callback: function (confirm) {
-          console.log(confirm)
-        }
-      }
-    )
     this.selectMaterials()
   }
 }
