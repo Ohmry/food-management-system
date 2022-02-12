@@ -97,8 +97,7 @@ export default {
         case 'update': {
           let selectedItem = this.table.data.find(material => material.isSelected == true)
           if (selectedItem == undefined) {
-            // this.snackbar.text = "Please select material item you want to edit"
-            // this.snackbar.visible = true 
+            this.$snackbar('Please select material item you want to edit')
           } else {
             this.dialog.mode = 'update'
             this.dialog.material = selectedItem
@@ -113,11 +112,7 @@ export default {
     deleteMaterial () {
       let material = this.table.data.find(material => material.isSelected == true)
       if (material == undefined) {
-        this.$snackbar({
-          text: 'Please select material item you want to delete'
-        })
-        // this.snackbar.text = "Please select material item you want to delete"
-        // this.snackbar.visible = true 
+        this.$snackbar('Please select material item you want to delete')
       } else {
         this.$confirm({
           title: "Delete Material Info",
@@ -133,8 +128,7 @@ export default {
     },
     onCloseDialog (refresh) {
       if (refresh) {
-        // this.snackbar.text = "Done"
-        // this.snackbar.visible = true
+        this.$snackbar('Done')
         this.selectMaterials()
       }
     }

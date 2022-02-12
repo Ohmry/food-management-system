@@ -19,8 +19,8 @@ const Component = {
     text: ''
   }),
   methods: {
-    onOpen (params) {
-      this.text = params.text
+    onOpen (message) {
+      this.text = message
       this.visible = true
     }
   },

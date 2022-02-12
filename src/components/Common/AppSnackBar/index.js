@@ -9,26 +9,14 @@ export default {
 
     Vue.component('AppSnackBar', AppSnackBar)
 
-    const snackbar = params => {
-      if (typeof params != 'object' || Array.isArray(params)) {
-        let caughtType = typeof params
-        if (Array.isArray(params)) caughtType = 'array'
-
-        throw new Error(
-          `Options type must be an object. Caught: ${caughtType}. Expected: object`
+    const snackbar = message => {
+      if (typeof message != 'string') {
+        let messageType = typeof message
+        throw new Error (
+          `Message type muse be an string. Caught: ${messageType}. Expected: string`
         )
       }
-
-      if (typeof params === 'object') {
-        if (Object.prototype.hasOwnProperty.call(params, 'text') && typeof params.text != 'string') {
-          let callbackType = typeof params.text
-          throw new Error(
-            `Text type must be an object. Caught: ${callbackType}. Expected: string`
-          )
-        }
-
-        events.$emit('open', params)
-      }
+      events.$emit('open', message)
     }
 
     snackbar.close = () => {
