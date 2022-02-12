@@ -7,7 +7,6 @@
         <AppButton text="New" icon="add" outlined @click.stop="openMaterial('new')" />
         <AppButton text="Edit" icon="edit" outlined class="ml-3" @click.stop="openMaterial('update')" />
         <AppButton text="Delete" icon="remove" outlined class="ml-3" @click.stop="deleteMaterial"/>
-        <MaterialInfoDialog :mode="dialog.mode" :value="dialog.visible" :material="dialog.material" @input="dialog.visible = $event" @close="onCloseDialog"/>
       </v-toolbar>
       <v-data-table :headers="table.headers" :items="table.data" style="user-select: none">
         <template v-slot:body="{items}">
@@ -26,6 +25,7 @@
         </template>
       </v-data-table>
     </v-container>
+    <MaterialInfoDialog :mode="dialog.mode" :value="dialog.visible" :material="dialog.material" @input="dialog.visible = $event" @close="onCloseDialog"/>
   </v-app>
 </template>
 

@@ -23,7 +23,7 @@
           </v-tabs-items>
           <v-toolbar flat>
             <v-spacer></v-spacer>
-            <AppButton text="New" icon="add" />
+            <AppButton text="New" icon="add" @click.stop="openDialog('new')"/>
             <AppButton text="Edit" icon="edit" class="ml-3"/>
             <AppButton text="Delete" icon="remove" class="ml-3"/>
           </v-toolbar>
@@ -83,21 +83,15 @@
           </v-tabs-items>
         </v-col>
       </v-row>
-      <v-snackbar v-model="snackbar.visible" :timeout="snackbar.timeout" color="rgba(157, 132, 191)" absolute top>
-        {{ snackbar.text }}
-        <template v-slot:action="{ attrs }">
-          <v-btn color="white" text v-bind="attrs" @click="snackbar.visible = false">
-            Close
-          </v-btn>
-        </template>
-      </v-snackbar>
     </v-container>
+    <FoodInfoDialog :mode="dialog.mode" :value="dialog.visible" :food="dialog.food" @input="dialog.visible = $event" @close="closeDialog" />
   </v-app>
 </template>
 
 <script>
 import DisplayFormatUtils from '../components/Utils/DisplayFormatUtils'
 import EditableCell from '../components/DataTable/EditableCell'
+import { FoodInfoDialog } from '../components/Food'
 import { 
         MT_UPDATE_RECIPE,
         MT_UPDATE_COMPOSITION 
@@ -105,17 +99,18 @@ import {
 
 export default {
   components: {
-    EditableCell
+    EditableCell,
+    FoodInfoDialog
   },
   mixins: [DisplayFormatUtils],
   data: () => ({
     tab: {
       activate: -1
     },
-    snackbar: {
+    dialog: {
+      mode: undefined,
       visible: false,
-      text: '',
-      timeout: 3000
+      food: undefined
     },
     foods: {
       table: {
@@ -254,6 +249,13 @@ export default {
       this.$store.commit(MT_UPDATE_COMPOSITION, { id: this.foods.table.selectedItem[0].id, food: food})
       this.snackbar.text = 'Quantity change successful'
       this.snackbar.visible = true
+    },
+    openDialog (mode) {
+      this.dialog.mode = mode
+      this.dialog.visible = true
+    },
+    closeDialog () {
+      this.dialog.visible = false
     }
   },
   mounted () {
