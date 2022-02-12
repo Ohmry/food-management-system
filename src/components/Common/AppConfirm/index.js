@@ -1,4 +1,6 @@
 import AppConfirm from './AppConfirm'
+import { events } from './events'
+
 
 export default {
   install (Vue) {
@@ -24,12 +26,12 @@ export default {
             `Callback type must be an function. Caught: ${callbackType}. Expected: function`
           )
         }
-        AppConfirm.methods.open(params)
+        events.$emit('open', params)
       }
     }
 
     confirm.close = () => {
-      AppConfirm.methods.close()
+      events.$emit('close')
     }
     
     Vue.prototype.$confirm = confirm

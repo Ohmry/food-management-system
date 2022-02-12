@@ -1,6 +1,7 @@
 <template>
-  <v-btn style="color: #9D84BF"
+  <v-btn 
     @click="onClick"
+    :style="buttonStyle"
     :outlined="outlined"
     :depressed="depressed"
     :color="color"
@@ -13,6 +14,12 @@
 <script>
 export default {
   props: ['text', 'icon', 'outlined', 'depressed', 'color'],
+  data: () => ({
+    buttonStyle: {
+      color: '#9D84BF',
+      backgroundColor: 'transparent'
+    }
+  }),
   methods: {
     onClick (e) {
       this.$emit('click', e)
