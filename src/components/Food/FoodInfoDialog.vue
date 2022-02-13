@@ -11,7 +11,7 @@
         <v-form ref="form">
           <v-container>
             <v-row>
-              <v-col cols="12" md="12" class="pb-0">
+              <v-col cols="12" md="12" class="pb-0 pr-8">
                 <v-text-field v-model="form.name" required label="Name" clearable type="text"></v-text-field>
               </v-col>
             </v-row>
@@ -19,7 +19,7 @@
               <v-col cols="12" md="3" class="pt-0">
                 <v-select v-model="form.productType" required label="Product Type" :items="select.productType"></v-select>
               </v-col>
-              <v-col cols="12" md="9" class="pt-0">
+              <v-col cols="12" md="9" class="pt-0 pr-8">
                 <v-text-field v-model="form.price" required label="Price" type="number" :rules="rules.price" hide-spin-buttons></v-text-field>
               </v-col>
             </v-row>
@@ -30,13 +30,30 @@
               </v-tabs>
               <v-tabs-items v-model="tab.activate">
                 <v-tab-item>
-                  <v-data-table :headers="tab.composition.headers" 
-                    fixed-header height="300px" v-model="tab.composition.selectedItem">
+                  <v-data-table
+                    :headers="tab.composition.headers"
+                    :items="form.composition"
+                    :items-per-page="-1"
+                    hide-default-footer
+                    fixed-header
+                    height="300px">
+                    <template v-slot:item.isSelected="{item}">
+                      <v-simple-checkbox v-model="item.isSelected" :ripple="false"></v-simple-checkbox>
+                    </template>
                   </v-data-table>
                 </v-tab-item>
                 <v-tab-item>
-                  <v-data-table :headers="tab.recipe.headers" 
-                    fixed-header height="300px" v-model="tab.recipe.selectedItem">
+                  <v-data-table
+                    :headers="tab.recipe.headers"
+                    :items="form.recipe"
+                    :items-per-page="-1"
+                    hide-default-footer
+                    fixed-header
+                    height="300px"
+                    class="pr-5">
+                    <template v-slot:item.isSelected="{item}">
+                      <v-simple-checkbox v-model="item.isSelected" :ripple="false"></v-simple-checkbox>
+                    </template>
                   </v-data-table>
                 </v-tab-item>
               </v-tabs-items>
@@ -44,20 +61,26 @@
           </v-container>
         </v-form>
       </v-card-text>
-      <v-card-actions>
-        <AppButton text="Add" icon="add" depressed />
-        <AppButton text="Delete" icon="remove" depressed />
+      <v-card-actions class="py-4">
+        <AppButton text="Add" icon="add" depressed @click.stop="onAdd"/>
+        <AppButton text="Delete" icon="remove" depressed @click.stop="onDelete"/>
         <v-spacer></v-spacer>
         <AppButton v-if="mode == 'new'" text="Save" icon="done" depressed @click.stop="onSave" />
         <AppButton v-if="mode == 'update'" text="Update" icon="done" depressed @click.stop="onUpdate" />
         <AppButton text="Close" icon="close" depressed color="white" @click.stop="onClose(false)" />
       </v-card-actions>
     </v-card>
+    <MaterialListDialog :value="dialog.visible" @input="dialog.visible = $event" @add="onAddMaterial" />
   </v-dialog>
 </template>
 
 <script>
+import MaterialListDialog from '../Material/MaterialListDialog'
+
 export default {
+  components: {
+    MaterialListDialog
+  },
   props: {
     value: {
       type: Boolean,
@@ -76,22 +99,25 @@ export default {
       composition: [],
       recipe: []
     },
+    dialog: {
+      visible: false
+    },
     tab: {
       activate: 1,
       composition: {
         headers: [
-          { text: 'Name', value: 'name', width: '200px' },
-          { text: 'Quantity', value: 'quantity', width: '100px' }
-        ],
-        selectedItem: null
+          { text: '', value: 'isSelected' },
+          { text: 'Name', value: 'name', width: '300px' },
+          { text: 'Quantity', value: 'quantity', width: '170px' }
+        ]
       },
       recipe: {
         headers: [
-          { text: 'Name', value: 'name' },
-          { text: 'Amount', value: 'amount', width: '200px' },
+          { text: '', value: 'isSelected' },
+          { text: 'Name', value: 'name', width: '200px' },
+          { text: 'Amount', value: 'amount', width: '110px' },
           { text: 'Stock Unit', value: 'stockUnit', width: '160px' }
-        ],
-        selectedItem: null
+        ]
       }
     },
     rules: {
@@ -107,7 +133,7 @@ export default {
       if (to == true) {
         switch (this.mode) {
           case 'new': {
-            this.form.productType = 'Single'
+            this.form.productType = 'Set'
             break;
           }
           case 'update': {
@@ -123,7 +149,6 @@ export default {
     form : {
       deep: true,
       handler (to) {
-        console.log(to)
         switch (to.productType) {
           case 'Single': {
             this.tab.activate = 1
@@ -176,6 +201,41 @@ export default {
     }
   },
   methods: {
+    onAdd () {
+      this.dialog.visible = true
+    },
+    onAddMaterial (materials) {
+      console.log(materials)
+      this.form.recipe = materials.map(material => {
+        return {
+          isSelected: false,
+          id: material.id,
+          name: material.name,
+          amount: 1,
+          stockUnit: material.stockUnit
+        }
+      })
+    },
+    onDelete () {
+      switch (this.form.productType) {
+        case 'Single': {
+          if (this.form.recipe.length < 1) {
+            break;
+          }
+          // let selectedItems = this.form.recipe.filter(material => material.isSelected == true)
+          // selectedItems.map(item => {
+          //   this.form.recipe.findIndex(material => material.)
+          // })
+          break;
+        }
+        case 'Set': {
+          break;
+        }
+        default: {
+          break;
+        }
+      }
+    },
     onSave () {
 
     },

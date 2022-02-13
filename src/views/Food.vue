@@ -23,9 +23,9 @@
           </v-tabs-items>
           <v-toolbar flat>
             <v-spacer></v-spacer>
-            <AppButton text="New" icon="add" @click.stop="openDialog('new')"/>
-            <AppButton text="Edit" icon="edit" class="ml-3"/>
-            <AppButton text="Delete" icon="remove" class="ml-3"/>
+            <AppButton outlined text="New" icon="add" @click.stop="openDialog('new')"/>
+            <AppButton outlined text="Edit" icon="edit" class="ml-3"/>
+            <AppButton outlined text="Delete" icon="remove" class="ml-3"/>
           </v-toolbar>
         </v-col>
         <v-col cols="12" md="7" style="padding: 20px 50px 10px 30px">
@@ -52,9 +52,9 @@
               </v-data-table>
               <v-toolbar flat>
                 <v-spacer></v-spacer>
-                <AppButton text="Add" icon="add" />
-                <AppButton text="Edit" icon="edit" class="ml-3" />
-                <AppButton text="Remove" icon="remove" class="ml-3" />
+                <AppButton outlined text="Add" icon="add" />
+                <AppButton outlined text="Edit" icon="edit" class="ml-3" />
+                <AppButton outlined text="Remove" icon="remove" class="ml-3" />
               </v-toolbar>
             </v-tab-item>
             <v-tab-item>
@@ -75,9 +75,9 @@
               </v-data-table>
               <v-toolbar flat>
                 <v-spacer></v-spacer>
-                <AppButton text="Add" icon="add" />
-                <AppButton text="Edit" icon="edit" class="ml-3" />
-                <AppButton text="Remove" icon="remove" class="ml-3" />
+                <AppButton outlined text="Add" icon="add" />
+                <AppButton outlined text="Edit" icon="edit" class="ml-3" />
+                <AppButton outlined text="Remove" icon="remove" class="ml-3" />
               </v-toolbar>
             </v-tab-item>
           </v-tabs-items>
