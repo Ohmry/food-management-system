@@ -4,6 +4,12 @@ import {
         AC_SAVE_MATERIAL,
         AC_UPDATE_MATERIAL,
         AC_DELETE_MATERIAL,
+        AC_SAVE_FOOD,
+        AC_UPDATE_FOOD,
+        AC_DELETE_FOOD,
+        MT_SAVE_FOOD,
+        MT_UPDATE_FOOD,
+        MT_DELETE_FOOD,
         MT_UPDATE_RECIPE,
         MT_UPDATE_COMPOSITION,
         MT_SAVE_MATERIAL,
@@ -87,6 +93,67 @@ export default new Vuex.Store({
     ]
   },
   mutations: {
+    [MT_SAVE_FOOD] (state, payload) {
+      let foodMaxId = Math.max.apply(Math, state.foods.map(food => food.id))
+      if (foodMaxId > 0) {
+        payload.id = foodMaxId + 1
+      } else {
+        payload.id = 1
+      }
+      state.foods.push({
+        id: payload.id,
+        name: payload.name,
+        productType: payload.productType,
+        price: payload.price
+      })
+
+      if (payload.productType == 'Single') {
+        let recipe = payload.recipe.map(material => {
+          return {
+            id: material.id,
+            amount: material.amount
+          }
+        })
+        state.recipes.push({
+          id: payload.id,
+          materials: recipe
+        })
+      } else if (payload.productType == 'Set') {
+        let composition = payload.composition.map(food => {
+          return {
+            id: food.id,
+            quantity: food.quantity
+          }
+        })
+        state.compositions.push({
+          id: payload.id,
+          foods: composition
+        })
+      }
+    },
+    [MT_UPDATE_FOOD] (state, payload) {
+      let food = state.foods.find(food => food.id == payload.id)
+      if (food == undefined) new Error('food is not found')
+      food.name = payload.name
+      food.productType = payload.productType
+      food.price = payload.price
+
+      if (food.productType == 'Single') {
+        let recipe = state.recipes.find(recipe => recipe.id == food.id)
+        recipe.materials = payload.recipe
+      } else if (food.productType == 'Set') {
+        let composition = state.compositions.find(composition => composition.id == food.id)
+        composition.foods = payload.composition
+      }
+    },
+    [MT_DELETE_FOOD] (state, payload) {
+      let food = state.foods.find(food => food.id == payload.id)
+      let recipe = state.recipes.find(recipe => recipe.id == payload.id)
+      let composition = state.recipes.find(composition => composition.id == payload.id)
+      state.foods.splice(food, 1)
+      state.recipes.splice(recipe, 1)
+      state.compositions.splice(composition, 1)
+    },
     [MT_SAVE_MATERIAL] (state, payload) {
       let materialMaxId = Math.max.apply(Math, state.materials.map(material => material.id))
       if (materialMaxId > 0) {
@@ -141,6 +208,27 @@ export default new Vuex.Store({
     }
   },
   actions: {
+    [AC_SAVE_FOOD] ({ commit }, payload) {
+      try {
+        commit(MT_SAVE_FOOD, payload)
+      } catch (err) {
+        console.error(err)
+      }
+    },
+    [AC_UPDATE_FOOD] ({ commit }, payload) {
+      try {
+        commit(MT_UPDATE_FOOD, payload)
+      } catch (err) {
+        console.error(err)
+      }
+    },
+    [AC_DELETE_FOOD] ({ commit }, payload) {
+      try {
+        commit(MT_DELETE_FOOD, payload)
+      } catch (err) {
+        console.error(err)
+      }
+    },
     [AC_SAVE_MATERIAL] ({ commit }, payload) {
       try {
         commit(MT_SAVE_MATERIAL, payload)

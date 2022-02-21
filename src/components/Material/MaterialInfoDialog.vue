@@ -6,7 +6,9 @@
     persistent
   >
     <v-card>
-      <v-card-title class="text-h5 px-9 pt-5" style="color: #9d84bf">{{ title }}</v-card-title>
+      <v-card-title class="text-h5 px-9 pt-5" style="color: #9d84bf">{{
+        title
+      }}</v-card-title>
       <v-card-subtitle class="py-1 px-9">{{ description }}</v-card-subtitle>
       <v-card-text>
         <v-form ref="form">
@@ -115,30 +117,30 @@
 <script>
 import {
   AC_SAVE_MATERIAL,
-  AC_UPDATE_MATERIAL
+  AC_UPDATE_MATERIAL,
 } from '../../store/mutation-types'
 
 export default {
   props: {
     value: {
       type: Boolean,
-      required: true
+      required: true,
     },
     mode: {
-      required: true
+      required: true,
     },
-    material: undefined
+    material: undefined,
   },
   watch: {
-    visible (to) {
+    visible(to) {
       if (to && this.mode == 'update') {
         this.form = JSON.parse(JSON.stringify(this.material))
       }
-    }
+    },
   },
   computed: {
     title: {
-      get () {
+      get() {
         switch (this.mode) {
           case 'new':
             return 'New Material'
@@ -147,10 +149,10 @@ export default {
           default:
             return 'Material Info'
         }
-      }
+      },
     },
     description: {
-      get () {
+      get() {
         switch (this.mode) {
           case 'new':
             return 'you can create new material item'
@@ -159,16 +161,16 @@ export default {
           default:
             return 'you can see material info'
         }
-      }
+      },
     },
     visible: {
-      get () {
+      get() {
         return this.value
       },
-      set (value) {
+      set(value) {
         this.$emit('input', value)
-      }
-    }
+      },
+    },
   },
   data: () => ({
     form: {
@@ -179,22 +181,24 @@ export default {
       stockConversionQuantity: undefined,
       supplyPrice: undefined,
       valueAddedTax: undefined,
-      stockUnitPrice: undefined
+      stockUnitPrice: undefined,
     },
     rules: {
-      name: [val => (val || '').length > 0 || 'This field is required'],
-      purchasePrice: [val => val > 0 || 'Purchase price should be over than 0'],
+      name: [(val) => (val || '').length > 0 || 'This field is required'],
+      purchasePrice: [
+        (val) => val > 0 || 'Purchase price should be over than 0',
+      ],
       stockConversionQuantity: [
-        quantity => quantity > 0 || 'Quantity should be over than 0'
-      ]
+        (quantity) => quantity > 0 || 'Quantity should be over than 0',
+      ],
     },
     select: {
       purchaseUnit: ['Box', 'Kg', 'Pack', 'L'],
-      stockUnit: ['Each', 'g', 'ml']
-    }
+      stockUnit: ['Each', 'g', 'ml'],
+    },
   }),
   methods: {
-    onSave () {
+    onSave() {
       let validate = this.$refs.form.validate()
       if (!validate) return
       this.$store.dispatch(
@@ -203,7 +207,7 @@ export default {
       )
       this.onClose(true)
     },
-    onUpdate () {
+    onUpdate() {
       let validate = this.$refs.form.validate()
       if (!validate) return
       this.$store.dispatch(
@@ -212,12 +216,12 @@ export default {
       )
       this.onClose(true)
     },
-    onClose (refresh) {
+    onClose(refresh) {
       this.visible = false
       this.$refs.form.reset()
       this.$emit('close', refresh)
     },
-    updatePurchasePrice (price) {
+    updatePurchasePrice(price) {
       if (Number.isInteger(Number(price))) {
         let supplyPrice = Math.round(Number(price) / 1.1)
         let valueAddedTax = price - supplyPrice
@@ -229,7 +233,7 @@ export default {
       }
       this.updateStockConversionQuantity(this.form.stockConversionQuantity)
     },
-    updateStockConversionQuantity (quantity) {
+    updateStockConversionQuantity(quantity) {
       if (
         Number.isInteger(Number(quantity)) &&
         Number.isInteger(this.form.supplyPrice)
@@ -239,8 +243,8 @@ export default {
       } else {
         this.form.stockUnitPrice = undefined
       }
-    }
-  }
+    },
+  },
 }
 </script>
 
