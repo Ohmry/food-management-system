@@ -14,7 +14,7 @@
               you can create data by click <v-icon>play_arrow</v-icon> Button
             </v-card-text>
             <v-card-actions>
-              <AppButton text="Create Data" icon="play_arrow" outlined />
+              <AppButton text="Create Data" icon="play_arrow" outlined @click="createData"/>
             </v-card-actions>
           </v-card>
         </v-col>
@@ -168,120 +168,150 @@ export default {
         }
       }
     },
+    statistics: [],
+    groupBySelling: [],
+    groupByHour: [],
+    groupByMaterials: []
   }),
   methods: {
-    refreshData() {
-      this.chart.data.push(Math.floor(Math.random() * 10 + 1))
-      this.chart.data.shift()
-      this.$refs.chart.update()
+    createData () {
+      this.$store.state.transaction.splice(0, this.$store.state.transaction.length)
+      let foodsCount = this.$store.state.foods.length
+      for (let i = 0; i < 24; i++) {
+        for (let j = 0; j < 5; j++) {
+          let randomFoodId = Math.floor(Math.random() * (foodsCount - 1) + 1)
+          let food = this.$store.state.foods.find(food => food.id == randomFoodId)
+          let randomQuantity = Math.floor(Math.random() * 5 + 1)
+          this.$store.state.transaction.push({
+            transactionId: i + 1,
+            saleTime: i,
+            foodId: food.id,
+            foodName: food.name,
+            quantity: randomQuantity,
+            totalAmount: food.price * randomQuantity
+          })
+        }
+      }
+      this.refreshData()
     },
+    refreshData () {
+      this.chart.labels.splice(0, this.chart.labels.length)
+      this.chart.data.splice(0, this.chart.data.length)
+      this.statistics.splice(0, this.statistics.length)
+      this.groupBySelling.splice(0, this.groupBySelling.length)
+      this.groupByHour.splice(0, this.groupByHour.length)
+      this.groupByMaterials.splice(0, this.groupByMaterials.length)
+      
+      this.$store.state.transaction.map(transInfo => {
+        let index = transInfo.saleTime
+        if (this.statistics[index] == undefined) {
+          this.statistics[index] = transInfo.totalAmount
+        } else {
+          this.statistics[index] += transInfo.totalAmount
+        }
+        
+        let times = this.groupByHour.find(item => item.times == (transInfo.saleTime < 10 ? '0' + transInfo.saleTime : transInfo.saleTime) + ":00")
+        if (times == undefined) {
+          this.groupByHour.push({
+            times: (transInfo.saleTime < 10 ? '0' + transInfo.saleTime : transInfo.saleTime) + ":00",
+            quantity: transInfo.quantity,
+            amount: transInfo.totalAmount
+          })
+        } else {
+          times.quantity += transInfo.quantity
+          times.amount += transInfo.totalAmount
+        }
+
+        let food = this.groupBySelling.find(item => item.id == transInfo.foodId)
+        if (food == undefined) {
+          this.groupBySelling.push({
+            id: transInfo.foodId,
+            food: transInfo.foodName,
+            quantity: transInfo.quantity,
+            amount: transInfo.totalAmount
+          })
+        } else {
+          food.quantity += transInfo.quantity
+          food.amount += transInfo.totalAmount
+        }
+
+        food = this.$store.state.foods.find(item => item.id == transInfo.foodId)
+        if (food.productType == 'Single') {
+          let recipe = this.$store.state.recipes.find(recipe => recipe.id == food.id)
+          if (recipe && recipe.materials) {
+            recipe.materials.map(material => {
+              let item = this.groupByMaterials.find(item => item.id == material.id)
+              if (item == undefined) {
+                this.groupByMaterials.push({
+                  id: material.id,
+                  amount: material.amount
+                })
+              } else {
+                item.amount += material.amount
+              }
+            })
+          }
+        } else if (food.productType == 'Set') {
+          let compose = this.$store.state.compositions.find(compose => compose.id == food.id)
+          if (compose && compose.foods) {
+            compose.foods.map(food => {
+              let recipe = this.$store.state.recipes.find(recipe => recipe.id == food.id)
+              if (recipe && recipe.materials) {
+                recipe.materials.map(material => {
+                  let item = this.groupByMaterials.find(item => item.id == material.id)
+                  if (item == undefined) {
+                    this.groupByMaterials.push({
+                      id: material.id,
+                      amount: material.amount
+                    })
+                  } else {
+                    item.amount += material.amount
+                  }
+                })
+              }
+            })
+          }
+        }
+      })
+
+      this.groupBySelling.sort((prev, next) => {
+        if (prev.amount == next.amount) return 0
+        if (prev.amount > next.amount) return -1
+        if (prev.amount < next.amount) return 1
+      })
+      this.table.selling.data = this.groupBySelling
+
+      this.groupByHour.sort((prev, next) => {
+        if (prev.amount == next.amount) return 0
+        if (prev.amount > next.amount) return -1
+        if (prev.amount < next.amount) return 1
+      })
+      this.table.hours.data = this.groupByHour
+
+      this.groupByMaterials.map(item => {
+        let material = this.$store.state.materials.find(material => material.id == item.id)
+        item.material = material.name
+        item.stockUnit = material.stockUnit
+        item.totalCost = (item.amount * material.stockUnitPrice).toFixed(3)
+      })
+      this.groupByMaterials.sort((prev, next) => {
+        if (prev.amount == next.amount) return 0
+        if (prev.amount > next.amount) return -1
+        if (prev.amount < next.amount) return 1
+      })
+      this.table.materials.data = this.groupByMaterials
+
+      for(let i = 0; i < 24; i++) {
+        let timeLabel = (i < 10 ? '0' + i : i) + ':00'
+        this.chart.labels.push(timeLabel)
+        this.chart.data.push(this.statistics[i])
+      }
+
+      this.$refs.chart.update()
+    }
   },
   mounted () {
-    let statistics = []
-    let groupBySelling = []
-    let groupByHour = []
-    let groupByMaterials = []
-    
-    this.$store.state.transaction.map(transInfo => {
-      let index = transInfo.saleTime
-      if (statistics[index] == undefined) {
-        statistics[index] = transInfo.totalAmount
-      } else {
-        statistics[index] += transInfo.totalAmount
-      }
-      
-      let times = groupByHour.find(item => item.times == (transInfo.saleTime < 10 ? '0' + transInfo.saleTime : transInfo.saleTime) + ":00")
-      if (times == undefined) {
-        groupByHour.push({
-          times: (transInfo.saleTime < 10 ? '0' + transInfo.saleTime : transInfo.saleTime) + ":00",
-          quantity: transInfo.quantity,
-          amount: transInfo.totalAmount
-        })
-      } else {
-        times.quantity += transInfo.quantity
-        times.amount += transInfo.totalAmount
-      }
-
-      let food = groupBySelling.find(item => item.id == transInfo.foodId)
-      if (food == undefined) {
-        groupBySelling.push({
-          id: transInfo.foodId,
-          food: transInfo.foodName,
-          quantity: transInfo.quantity,
-          amount: transInfo.totalAmount
-        })
-      } else {
-        food.quantity += transInfo.quantity
-        food.amount += transInfo.totalAmount
-      }
-
-      food = this.$store.state.foods.find(item => item.id == transInfo.foodId)
-      if (food.productType == 'Single') {
-        let recipe = this.$store.state.recipes.find(recipe => recipe.id = food.id)
-        recipe.materials.map(material => {
-          let item = groupByMaterials.find(item => item.id == material.id)
-          if (item == undefined) {
-            groupByMaterials.push({
-              id: material.id,
-              amount: material.amount
-            })
-          } else {
-            item.amount += material.amount
-          }
-        })
-      } else if (food.productType == 'Set') {
-        let compose = this.$store.state.compositions.find(compose => compose.id == food.id)
-        compose.foods.map(food => {
-          let recipe = this.$store.state.recipes.find(recipe => recipe.id = food.id)
-          recipe.materials.map(material => {
-            let item = groupByMaterials.find(item => item.id == material.id)
-            if (item == undefined) {
-              groupByMaterials.push({
-                id: material.id,
-                amount: material.amount
-              })
-            } else {
-              item.amount += material.amount
-            }
-          })
-        })
-      }
-    })
-
-    groupBySelling.sort((prev, next) => {
-      if (prev.amount == next.amount) return 0
-      if (prev.amount > next.amount) return -1
-      if (prev.amount < next.amount) return 1
-    })
-    this.table.selling.data = groupBySelling
-
-    groupByHour.sort((prev, next) => {
-      if (prev.amount == next.amount) return 0
-      if (prev.amount > next.amount) return -1
-      if (prev.amount < next.amount) return 1
-    })
-    this.table.hours.data = groupByHour
-
-    groupByMaterials.map(item => {
-      let material = this.$store.state.materials.find(material => material.id == item.id)
-      item.material = material.name
-      item.stockUnit = material.stockUnit
-      item.totalCost = (item.amount * material.stockUnitPrice).toFixed(3)
-    })
-    groupByMaterials.sort((prev, next) => {
-      if (prev.amount == next.amount) return 0
-      if (prev.amount > next.amount) return -1
-      if (prev.amount < next.amount) return 1
-    })
-    this.table.materials.data = groupByMaterials
-
-    for(let i = 0; i < 24; i++) {
-      let timeLabel = (i < 10 ? '0' + i : i) + ':00'
-      this.chart.labels.push(timeLabel)
-      this.chart.data.push(statistics[i])
-    }
-
-    this.$refs.chart.update()
+    this.refreshData()
   }
 }
 </script>
