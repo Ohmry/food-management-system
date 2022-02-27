@@ -2,7 +2,7 @@
   <v-navigation-drawer app mini-variant mini-variant-width="80" color="#F2F2F2">
     <!-- Logo -->
     <v-avatar class="d-block text-center mx-auto mt-4" size="52">
-      <v-icon color="#9D84BF" size="52">fab fa-github</v-icon>
+      <v-icon color="#9D84BF" size="52" @click="redirect('https://github.com/Ohmry/food-management-system')">fab fa-github</v-icon>
     </v-avatar>
     <v-divider class="mx-3 my-3"></v-divider>
     <v-list flat>
@@ -28,7 +28,12 @@ export default {
       // { title: 'Sales', icon: 'attach_money' },
       // { title: 'Stock', icon: 'store' }
     ]
-  })
+  }),
+  methods: {
+    redirect (path) {
+      this.$router.push(path)
+    }
+  }
 }
 </script>
 
