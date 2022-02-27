@@ -31,7 +31,7 @@ export default {
   }),
   methods: {
     redirect (path) {
-      this.$router.push(path)
+      window.location.href = path
     }
   }
 }
