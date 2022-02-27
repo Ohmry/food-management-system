@@ -29,8 +29,8 @@ export default {
             label: '',
             data: this.data,
             borderWidth: 1,
-            borderColor: '#000',
-            pointRadius: 0
+            borderColor: '#58238C',
+            backgroundColor: '#9D84BF'
           }
         ]
       },

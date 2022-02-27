@@ -25,8 +25,8 @@ export default {
       { title: 'DashBoard', icon: 'dashboard' },
       { title: 'Material', icon: 'local_shipping' },
       { title: 'Food', icon: 'restaurant' },
-      { title: 'Sales', icon: 'attach_money' },
-      { title: 'Stock', icon: 'store' }
+      // { title: 'Sales', icon: 'attach_money' },
+      // { title: 'Stock', icon: 'store' }
     ]
   })
 }

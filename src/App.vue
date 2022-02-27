@@ -15,7 +15,7 @@ export default {
   created () {
     /** create dummy transaction */
     let foodsCount = this.$store.state.foods.length
-    for (let i = 0; i < 144; i++) {
+    for (let i = 0; i < 24; i++) {
       for (let j = 0; j < 5; j++) {
         let randomFoodId = Math.floor(Math.random() * (foodsCount - 1) + 1)
         let food = this.$store.state.foods.find(food => food.id == randomFoodId)
