@@ -5,21 +5,27 @@
     :outlined="outlined"
     :depressed="depressed"
     :color="color"
+    :fab="fab"
+    :small="small"
   >
-    <v-icon class="mr-2" color="#9D84BF" v-text="icon"></v-icon>
+    <v-icon :class="{ 'mr-2': this.text != null }" :color="this.color" v-text="icon" :size="iconSize"></v-icon>
       {{ text }}
   </v-btn>
 </template>
 
 <script>
 export default {
-  props: ['text', 'icon', 'outlined', 'depressed', 'color'],
-  data: () => ({
+  props: ['text', 'icon', 'outlined', 'depressed', 'color', 'fab', 'small', 'white', 'iconSize'],
+  computed: {
     buttonStyle: {
-      color: '#9D84BF',
-      backgroundColor: 'transparent'
+      get () {
+        return {
+          color: this.white != undefined ? '#FFFFFF' : '#9D84BF',
+          backgroundColor: 'transparent'
+        }
+      }
     }
-  }),
+  },
   methods: {
     onClick (e) {
       this.$emit('click', e)

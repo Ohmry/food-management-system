@@ -90,7 +90,8 @@ export default new Vuex.Store({
           { id: 7, amount: 1 }
         ]
       }
-    ]
+    ],
+    transaction: []
   },
   mutations: {
     [MT_SAVE_FOOD] (state, payload) {

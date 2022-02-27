@@ -19,7 +19,6 @@ export default {
     }
   },
   mounted () {
-    console.log(this.height)
     const context = document.getElementById('chart-board')
     this.chart = new Chart(context, {
       type: this.type,

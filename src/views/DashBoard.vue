@@ -8,6 +8,32 @@
       <v-item-group>
         <v-container fluid>
           <v-row justify="start">
+            <v-col cols="12" md="2">
+              <v-item v-slot="{ active }">
+                <v-card class="d-flex rounded-xl"
+                  :color="active ? '#58238C' : '#9D84BF'"
+                  dark height="200"
+                  style="user-select: none">
+                  <v-row>
+                    <v-col cols="12" sm="12" class="my-3 mx-3">
+                      <v-list-item three-line>
+                        <v-list-item-content>
+                          <div>
+                            <v-icon size="52">videocam</v-icon>
+                          </div>
+                          <v-list-item-subtitle class="text-h6">Simulate</v-list-item-subtitle>
+                          <v-list-item-title class="py-5">
+                            <AppButton outlined fab white icon="play_arrow" iconSize="42" class="mr-3" />
+                            <!-- <AppButton outlined fab white icon="pause" iconSize="42" class="mr-3" /> -->
+                            <AppButton outlined fab white icon="stop" iconSize="42" />
+                          </v-list-item-title>
+                        </v-list-item-content>
+                      </v-list-item>
+                    </v-col>
+                  </v-row>
+                </v-card>
+              </v-item>
+            </v-col>
             <v-col cols="12" md="3">
               <OverviewItem
                 title="Total Transaction"
@@ -22,65 +48,23 @@
                 value="1,999,438"
               />
             </v-col>
-            <v-col cols="12" md="3">
+            <v-col cols="12" md="2">
               <OverviewItem
-                title="Average Selling Price"
-                icon="show_chart"
-                value="9,438"
-              />
-            </v-col>
-            <v-col cols="12" md="3">
-              <OverviewItem
-                title="Average Cost"
+                title="Cost Per Period"
                 icon="equalizer"
-                value="2,214"
+                value="9,438"
               />
             </v-col>
           </v-row>
         </v-container>
       </v-item-group>
-      <v-container fluid>
-        <ViewSubTitle
-          title="Most Sales Food"
-          description="you can see the most sales food list and graph"
+      <LineChart
+          ref="chart"
+          :labels="this.chart.labels"
+          :data="this.chart.data"
+          :options="this.chart.options"
+          height="200px"
         />
-        <v-row>
-          <v-col cols="12" md="6" sm="1">
-            <v-data-table
-              :headers="table.headers"
-              :items="table.datasets"
-              :hide-default-footer="true"
-              :items-per-page="9"
-            >
-              <template v-slot:item.amount="{ item }">
-                {{
-                  item.amount
-                    .toString()
-                    .replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,')
-                }}
-              </template>
-              <template v-slot:item.quantity="{ item }">
-                {{
-                  item.quantity
-                    .toString()
-                    .replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,')
-                }}
-              </template>
-              <template v-slot:item.unitPrice="{ item }">
-                {{
-                  item.unitPrice
-                    .toString()
-                    .replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,')
-                }}
-              </template>
-            </v-data-table>
-          </v-col>
-          <v-col cols="12" md="6" sm="1">
-            <v-btn @click="refreshData">Refresh</v-btn>
-            <LineChart ref="chart" :labels="this.chart.labels" :data="this.chart.data" :options="this.chart.options" />
-          </v-col>
-        </v-row>
-      </v-container>
     </v-container>
   </v-app>
 </template>
@@ -97,90 +81,53 @@ export default {
   data: () => ({
     /** Summary */
     summary: {
-      data: null
+      data: null,
     },
-    /** Table */
-    table: {
-      headers: [
-        { text: 'Food', value: 'name' },
-        { text: 'Unit Price', value: 'unitPrice', align: 'end' },
-        { text: 'Selling Quantity', value: 'quantity', align: 'end' },
-        { text: 'Selling Amount', value: 'amount', align: 'end' }
-      ],
-      datasets: [
-        {
-          name: 'Burger',
-          quantity: '500',
-          unitPrice: '5000',
-          amount: '2500000'
-        },
-        {
-          name: 'French fries',
-          quantity: '175',
-          unitPrice: '1000',
-          amount: '175000'
-        },
-        { name: 'Coke', quantity: '500', unitPrice: '500', amount: '250000' },
-        {
-          name: 'Burger',
-          quantity: '500',
-          unitPrice: '5000',
-          amount: '2500000'
-        },
-        {
-          name: 'French fries',
-          quantity: '175',
-          unitPrice: '1000',
-          amount: '175000'
-        },
-        { name: 'Coke', quantity: '500', unitPrice: '500', amount: '250000' },
-        {
-          name: 'Burger',
-          quantity: '500',
-          unitPrice: '5000',
-          amount: '2500000'
-        },
-        {
-          name: 'French fries',
-          quantity: '175',
-          unitPrice: '1000',
-          amount: '175000'
-        },
-        { name: 'Coke', quantity: '500', unitPrice: '500', amount: '250000' },
-        {
-          name: 'Burger',
-          quantity: '500',
-          unitPrice: '5000',
-          amount: '2500000'
-        },
-        {
-          name: 'French fries',
-          quantity: '175',
-          unitPrice: '1000',
-          amount: '175000'
-        },
-        { name: 'Coke', quantity: '500', unitPrice: '500', amount: '250000' }
-      ]
-    },
+    timer: undefined,
     /** Chart */
     chart: {
-      labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-      data: [12, 19, 3, 5, 2, 3],
+      labels: [],
+      data: [],
       options: {
+        maintainAspectRatio: false,
         scales: {
-          y: {
-            beginAtZero: true
-          }
+          yAxes: [
+            {
+              ticks: {
+                min: 0,
+                stepSize: 10,
+                max: 100
+              }
+            }
+          ]
         }
       }
-    }
+    },
   }),
   methods: {
-    refreshData () {
+    refreshData() {
       this.chart.data.push(Math.floor(Math.random() * 10 + 1))
       this.chart.data.shift()
       this.$refs.chart.update()
+    },
+  },
+  mounted () {
+    let group = {}
+    this.$store.state.transaction.map(transInfo => {
+      let index = transInfo.saleTime
+      if (group[index] == undefined) {
+        group[index] = transInfo.quantity
+      } else {
+        group[index] += transInfo.quantity
+      }
+    })
+
+    for(let i = 0; i < 144; i++) {
+      this.chart.labels.push(i)
+      this.chart.data.push(group[i])
     }
+
+    this.$refs.chart.update()
   }
 }
 </script>

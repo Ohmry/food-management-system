@@ -11,7 +11,26 @@
 
 <script>
 export default {
-  name: 'App'
+  name: 'App',
+  created () {
+    /** create dummy transaction */
+    let foodsCount = this.$store.state.foods.length
+    for (let i = 0; i < 144; i++) {
+      for (let j = 0; j < 5; j++) {
+        let randomFoodId = Math.floor(Math.random() * (foodsCount - 1) + 1)
+        let food = this.$store.state.foods.find(food => food.id == randomFoodId)
+        let randomQuantity = Math.floor(Math.random() * 5 + 1)
+        this.$store.state.transaction.push({
+          transactionId: i + 1,
+          saleTime: i,
+          foodId: food.id,
+          foodName: food.name,
+          quantity: randomQuantity,
+          totalAmount: food.price * randomQuantity
+        })
+      }
+    }
+  }
 };
 </script>
 
