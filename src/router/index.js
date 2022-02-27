@@ -6,7 +6,8 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
-    redirect: '/dashboard'
+    name: 'DashBoard',
+    component: () => import('../views/DashBoard.vue')
   },
   {
     path: '/dashboard',
@@ -36,7 +37,7 @@ const routes = [
 ]
 
 const router = new VueRouter({
-  mode: 'history',
+  mode: 'hash',
   base: process.env.BASE_URL,
   routes
 })
