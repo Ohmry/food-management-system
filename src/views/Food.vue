@@ -323,8 +323,7 @@ export default {
         id: this.foods.table.selectedItem[0].id,
         material: material,
       })
-      this.snackbar.text = 'Amount change successful'
-      this.snackbar.visible = true
+      this.$snackbar('Amount change successful')
     },
     openCompositionItem(composition) {
       this.selectRow('composition', composition)
@@ -339,8 +338,7 @@ export default {
         id: this.foods.table.selectedItem[0].id,
         food: food,
       })
-      this.snackbar.text = 'Quantity change successful'
-      this.snackbar.visible = true
+      this.$snackbar('Quantity change successful')
     },
     openDialog(mode) {
       if (mode == 'update') {

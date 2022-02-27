@@ -75,7 +75,7 @@
         </v-col>
         <v-col cols="12" md="4">
           <v-card flat>
-            <v-card-title class="text-h5" style="color: #9D84BF;">Top 5 Using Materials</v-card-title>
+            <v-card-title class="text-h5" style="color: #9D84BF;">Top 5 Cost Material</v-card-title>
             <v-card-text>
               <v-data-table
                 :headers="this.table.materials.headers"
@@ -244,10 +244,10 @@ export default {
               if (item == undefined) {
                 this.groupByMaterials.push({
                   id: material.id,
-                  amount: material.amount
+                  amount: material.amount * transInfo.quantity
                 })
               } else {
-                item.amount += material.amount
+                item.amount += material.amount * transInfo.quantity
               }
             })
           }
@@ -262,10 +262,10 @@ export default {
                   if (item == undefined) {
                     this.groupByMaterials.push({
                       id: material.id,
-                      amount: material.amount
+                      amount: material.amount * transInfo.quantity
                     })
                   } else {
-                    item.amount += material.amount
+                    item.amount += material.amount * transInfo.quantity
                   }
                 })
               }
@@ -292,12 +292,12 @@ export default {
         let material = this.$store.state.materials.find(material => material.id == item.id)
         item.material = material.name
         item.stockUnit = material.stockUnit
-        item.totalCost = (item.amount * material.stockUnitPrice).toFixed(3)
+        item.totalCost = item.amount * material.stockUnitPrice
       })
       this.groupByMaterials.sort((prev, next) => {
-        if (prev.amount == next.amount) return 0
-        if (prev.amount > next.amount) return -1
-        if (prev.amount < next.amount) return 1
+        if (prev.totalCost == next.totalCost) return 0
+        if (prev.totalCost > next.totalCost) return -1
+        if (prev.totalCost < next.totalCost) return 1
       })
       this.table.materials.data = this.groupByMaterials
 
