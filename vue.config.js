@@ -1,6 +1,6 @@
 module.exports = {
   outputDir: './docs',
-  publicPath: '/food-management-system/',
+  publicPath: '/statistics-fast-food/',
   transpileDependencies: [
     'vuetify'
   ]
