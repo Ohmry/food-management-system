@@ -1,14 +1,16 @@
-# Foot management system
-This application is example system about sales food and manage stocks. You can see [demo page](https://ohmry.github.io/food-management-system)
+# Statistics of fast food restaurant
+This application show statistics of food sales and stock used. you can see [demo page](https://ohmry.github.io/statistics-fast-food)
 
 ## Information Architecture
-This application has menu as follow.
-|Menu|Type|Description|
-|---|---|---|
-|Dashboard|Satistics|You can see statistics for data you created by button.|
-|Materials|List|Show list of materials.|
-|Food|List|Show list of foods.|
-||Recipe|Show and manage for recipe of foods.|
+It has menu as below.
+
+### Dashboard
+You can create simulate data here. 
+|Menu|Description|
+|---|---|
+|Dashboard||
+|Materials||
+|Food||
 
 ## Skills
 This application created by vuejs. using vuetify framework.
